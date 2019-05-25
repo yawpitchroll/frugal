@@ -1,0 +1,13 @@
+<li class="bullet">
+    {{- $title := T "bullet_title" . }}
+    <a href="{{ .Permalink }}" title="{{ $title | safeHTML }}">
+       {{- with .Params.date }}
+       <span class="date">
+           {{ partial "util/published" . | chomp }}
+       </span>
+       {{- end }}
+       <span class="title">
+           {{ .Title | truncate 60 }}
+       </span>
+    </a>
+</li>

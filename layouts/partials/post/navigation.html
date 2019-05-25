@@ -1,0 +1,28 @@
+{{- if or (.PrevInSection) (.NextInSection) }}
+<nav class="post-nav">
+	{{- if .PrevInSection }}
+	<div class="previous">
+        <a href="{{ .PrevInSection.RelPermalink }}" rel="prev" title="{{ T "post_navigation_previous_title" . | safeHTML }}">
+            {{ partial "util/fontawesome" "backward-solid" | chomp -}}
+			<span class="title">{{ .PrevInSection.Title | truncate 30 }}</span>
+            <span class="spacer">{{- partial "util/fontawesome" "forward-solid" | chomp }}</span>
+		</a>
+    {{- else }}
+	<div class="previous nomore">
+        {{ partial "util/fontawesome" "backward-solid" | chomp }}
+	{{- end }}
+	</div>
+	{{- if .NextInSection }}
+	<div class="next">
+        <a href="{{ .NextInSection.RelPermalink }}" rel="next" title="{{ T "post_navigation_next_title" . | safeHTML }}">
+            <span class="spacer">{{ partial "util/fontawesome" "backward-solid" | chomp -}}</span>
+			<span class="title">{{ .NextInSection.Title | truncate 30 }}</span>
+            {{- partial "util/fontawesome" "forward-solid" | chomp }}
+		</a>
+    {{- else }}
+	<div class="next nomore">
+        {{ partial "util/fontawesome" "forward-solid" | chomp }}
+	{{- end }}
+	</div>
+</nav>
+{{- end }}

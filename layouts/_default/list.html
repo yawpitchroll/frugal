@@ -1,0 +1,30 @@
+{{- define "main" }}
+<section class="main-content">
+    <header class="main-header">    
+        {{- if not .IsHome }}
+        <h1 class="title">{{ .Title }}</h1>
+        {{- end }}
+    </header>
+    <section class="list-content">
+        {{- .Content }}
+        <nav>
+            <ul class="summaries">
+                {{- $paginator := .Paginate (where .Data.Pages "Type" "!=" "page") }}
+                {{- if and (eq .Kind "taxonomy") (eq .Type "series") }}
+                {{- range $paginator.Pages.ByPublishDate }}
+                {{- .Render "summary" }}
+                {{- end }}
+                {{- else }}
+                {{- range $paginator.Pages }}
+                {{- .Render "summary" }}
+                {{- end }}
+                {{- end }}
+            </ul>
+        </nav>
+    </section>
+</section>
+{{- end }}
+
+{{- define "footer" -}}
+{{ partial "util/pad" (slice 16 "nav/paginator" .) | chomp }}
+{{- end }}

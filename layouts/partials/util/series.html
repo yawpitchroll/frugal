@@ -1,0 +1,17 @@
+{{- with .Params.series }}
+{{- range . }}
+{{- $series := site.Home.GetPage (path.Join "series" (anchorize .)) }}
+{{- $series_title := T "series_link_title" $series }}
+{{- $series_link := printf "<a href=\"%s\" title=\"%s\">%s</a>" $series.Permalink $series_title $series.Title }}
+{{- $total := len $series.Pages }}
+{{- $post := 0 }}
+{{- $index := 0 }}
+{{- range $series.Pages.ByPublishDate }}
+{{- $index = add $index 1 }}
+{{- if eq $.Page . }}
+{{- $post = $index }}
+{{- end }}
+{{- end }}
+<p class="series">{{ T "series_overview" (dict "Index" $post "Count" $total "Link" $series_link) | safeHTML }}</p>
+{{- end }}
+{{- end }}

@@ -1,0 +1,20 @@
+{{- $copyright := site.Copyright | default (printf "%s All Rights Reserved" (dateFormat "2006" now)) }}
+{{- $pattern := "1|2\\d{3}" }}
+{{- if (findRE $pattern $copyright) }}
+{{- $start := time (printf "%s-01-01" (index (findRE $pattern $copyright 1) 0)) }}
+{{- $datestring := partial "util/year" $start | chomp }}
+{{- if (lt $start.Year now.Year) }}
+{{- $datestring = printf "%s-%s" $datestring (partial "util/year" now | chomp) }}
+{{- end }}
+{{- $copyright = $copyright | replaceRE $pattern $datestring }}
+{{- end }}
+{{- $hugo_text := T "hugo_link_text" }}
+{{- $hugo_title := T "hugo_link_title" | default $hugo_text }}
+{{- $hugo_link := printf "<a href=\"https://gohugo.io/\" title=\"%s\">%s</a>" $hugo_title $hugo_text }}
+{{- $frugal_text := T "frugal_link_text" }}
+{{- $frugal_title := T "frugal_link_title" | default $frugal_text }}
+{{- $frugal_link := printf "<a href=\"https://github.com/yawpitchroll/frugal\" title=\"%s\">%s</a>" $frugal_title $frugal_text }}
+{{- $powered_by := T "powered_by_text" (dict "Hugo" $hugo_link "Frugal" $frugal_link) }}
+<small class="copyright">
+    <span class="notice">{{- $copyright | markdownify -}}.</span><span class="powered">{{ $powered_by | safeHTML }}</span>
+</small>

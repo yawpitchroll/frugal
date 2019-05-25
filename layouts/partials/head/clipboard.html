@@ -1,0 +1,7 @@
+{{- $clipboard := resources.Get "js/clipboard.js" -}}
+{{- if site.IsServer -}}
+<script type="text/javascript" src="{{ $clipboard.Permalink }}"></script>
+{{- else -}}
+{{- $clipboard = $clipboard | minify | fingerprint -}}
+<script type="text/javascript" src="{{ $clipboard.Permalink }}" integrity="{{ $clipboard.Data.Integrity }}"></script>
+{{- end }}

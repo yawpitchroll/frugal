@@ -1,0 +1,25 @@
+{
+  "name": "frugal",
+  "version": "1.0.0",
+  "description": "A fast, relatively lightweight, code-friendly technical blogging theme for Hugo.",
+  "main": "postcss.config.js",
+  "scripts": {
+    "copy-resources": "rsync -aq --exclude 'opengraph*fill*.*' exampleSite/resources . --delete --prune-empty-dirs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yawpitchroll/frugal.git"
+  },
+  "author": "Michael Morehouse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yawpitchroll/frugal/issues"
+  },
+  "homepage": "https://github.com/yawpitchroll/frugal#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.5.1",
+    "cssnano": "^4.1.10",
+    "postcss-cli": "^6.1.2",
+    "postcss-normalize": "^7.0.1"
+  }
+}

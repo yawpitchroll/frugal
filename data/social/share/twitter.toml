@@ -1,0 +1,5 @@
+name = "Twitter"
+icon = "twitter-brands"
+size_factor = 1.13
+color = "#55acee"
+url = "https://twitter.com/intent/tweet?text={TITLE}&url={PERMALINK}"

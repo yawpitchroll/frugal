@@ -1,0 +1,34 @@
+{{- $form_text := T "contact_form_text" . }}
+{{- $form_title := T "contact_form_title" . | default $form_text }}
+{{- $email_text := T "contact_email_text" . }}
+{{- $email_title := T "contact_email_title" . | default $email_text }}
+{{- $subject := T "contact_subject" . }}
+{{- $message_text := T "contact_message_text" . }}
+{{- $message_title := T "contact_message_title" . | default $message_text }}
+{{- $formspree_text := T "contact_formspree_text" . }}
+{{- $formspree_title := T "contact_formspree_title" . | default $formspree_text }}
+{{- $formspree_link := printf "<a href=\"https://docs.formspree.io/files/privacy.pdf\" target=\"_blank\" title=\"%s\" rel=\"noreferrer\">%s</a>" $formspree_title $formspree_text }}
+{{- $submit_text := T "contact_submit_text" . }}
+{{- $submit_title := T "contact_submit_title" . | default $submit_text }}
+<div class="expandable contactform">
+    <input type="checkbox" id="contact-toggle" name="contact-toggle" class="toggle"/>
+    <label for="contact-toggle" title="{{ $form_title }}" class="title">{{ $form_text }}</label>
+    <form action="//formspree.io/{{ site.Params.Frugal.Formspree.email }}" method="POST">
+        <div class="contents">
+            <div class="email">
+                <label for="contactform-email"></label>
+                <input type="email" name="_replyto" id="contactform-email" placeholder="{{ $email_text }}" title="{{ $email_title }}" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+            <div class="message">
+                <label for="message"></label>
+                <textarea name="message" placeholder="{{ $message_text }}" title="{{ $message_title }}" id="message" cols="30" rows="5" required minlength="5" maxlength="500" autocapitalize="sentences" autocomplete="on" spellcheck="true"></textarea>
+            </div>
+            <input type="hidden" name="_subject" value="{{ $subject }}">
+            <input type="text" name="_gotcha" class="gotcha">
+            <div class="legalese">
+                <p>{{ T "contact_legalese" (dict "Formspree" $formspree_link) | markdownify | safeHTML }}</p>
+            </div>
+            <button name="submit" title="{{ $submit_title }}">{{ $submit_text }}</button>
+        </div>
+    </form>
+</div>

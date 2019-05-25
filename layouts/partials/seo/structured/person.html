@@ -1,0 +1,16 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "name": "{{ .name }}",{{ with .email }}
+    "email": "mailto:{{ . }}",{{ end }}{{ with .social }}
+    "sameAs" : [
+        {{ $stop := sub (len .) 1 }}
+        {{- range $account, $username := . -}}
+        {{- $setup := index site.Data.social.links $account -}}
+        {{- $url := replace $setup.url "{USERNAME}" $username -}}
+        "{{ $url }}"{{- if ne $stop 0 -}},
+        {{ end }}
+        {{- $stop = sub $stop 1 -}}
+        {{ end }}
+    ]{{ end }}
+}

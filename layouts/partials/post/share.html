@@ -1,0 +1,22 @@
+<div class="post-share">
+    <span class="title">Share this post</span>
+    <div class="items">
+        {{- with site.Params.Frugal.Social.share }}
+        {{- range sort . "weight" "asc" }}
+        {{- $setup := index site.Data.social.share .provider }}
+        {{- $default := printf "Share on %s" $setup.name }}
+        {{- $url := replace $setup.url "{TITLE}" $.Title }}
+        {{- $url = replace $url "{PERMALINK}" $.Permalink }}
+        {{- $url = replace $url "{ID}" .id }}
+        {{- $args := dict "Provider" $setup.name }}
+        {{- $text := T "social_share_text" $args }}
+        {{- $title := T "social_share_title" $args | default $text }}
+        <a class="item {{ .provider }}" title="{{ $title }}" target="_blank" rel="noreferrer" href="{{ $url | safeURL }}"><span class="screen-reader">{{ $text }}</span></a>
+        {{- end }}
+        {{- end }}
+        {{- $text := T "social_share_email_text" . }}
+        {{- $title := T "social_share_email_title" . | default $text }}
+        <a class="item email" title="{{ $title }}" href="mailto:{{ site.Data.social.share.email.name }}?subject={{ .Title }}&body={{ .Permalink }}" target="_blank" rel="noreferrer"><span class="screen-reader">{{ $text }}</span></a>
+        <button class="item link" id="copylink" data-clipboard-action="copy" data-clipboard-text="{{ .Permalink }}" title="{{ T "social_share_copy_title" . | safeHTML }}"><span class="text">{{ .Permalink }}</span></button>
+    </div>
+</div>

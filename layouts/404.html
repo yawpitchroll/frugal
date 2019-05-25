@@ -1,0 +1,24 @@
+{{- define "title" -}}
+{{ T "404_page_title" . | default .Title }} | {{ site.Title }}
+{{- end -}}
+
+{{- define "body" }}
+{{- $link := site.Params.Frugal.Pages.E404.link | default (site.Params.Frugal.Pages.Home.Link | default "posts") }}
+{{- $page := site.Home.GetPage $link | default (index site.Home.Sections 0) }}
+{{- $text := T "home_link_text" $page }}
+{{- $title := T "home_link_title" $page | default $text }}
+<div class="splash">
+    <div class="site-content">
+        <main class="splash-main error">
+            <a class="branding" href="{{ $page.Permalink }}" title="{{ $title }}">
+                {{ partial "util/logo" . | chomp }}
+                <h1 class="entry-text">{{ $text }}</h1>
+            </a>
+        </main>
+
+        <footer class="site-footer">
+            {{ partial "util/pad" (slice 12 "nav/footbar" .) | chomp }} 
+        </footer>
+    </div>
+</div>
+{{ end }}

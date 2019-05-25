@@ -1,0 +1,35 @@
+{{- $form_text := T "maillist_form_text" . }}
+{{- $form_title := T "maillist_form_title" . | default $form_text }}
+{{- $email_text := T "maillist_email_text" . }}
+{{- $email_title := T "maillist_email_title" . | default $email_text }}
+{{- $consent_text := T "maillist_consent_text" . }}
+{{- $consent_title := T "maillist_consent_title" . | default $consent_text }}
+{{- $mailchimp_text := T "maillist_mailchimp_text" . }}
+{{- $mailchimp_title := T "maillist_mailchimp_title" . | default $mailchimp_text }}
+{{- $mailchimp_link := printf "<a href=\"https://mailchimp.com/legal/\" target=\"_blank\" rel=\"noreferrer\" title=\"%s\">%s</a>" $mailchimp_title $mailchimp_text }}
+{{- $submit_text := T "maillist_submit_text" . }}
+{{- $submit_title := T "maillist_submit_title" . | default $submit_text }}
+{{- $server := site.Params.Frugal.Mailchimp.server }}
+{{- $userid := site.Params.Frugal.Mailchimp.userid }}
+{{- $audienceid := site.Params.Frugal.Mailchimp.audienceid }}
+<div class="expandable maillist">
+    <input type="checkbox" id="maillist-toggle" name="maillist-toggle" class="toggle"/>
+    <label for="maillist-toggle" title="{{ $form_title }}" class="title">{{ $form_text }}</label>
+    <form action="https://{{ $server }}/subscribe/post?u={{ $userid }}&amp;id={{ $audienceid }}" method="POST" name="subscribe" target="_blank" rel="noreferrer">
+        <div class="contents">
+            <input type="email" value="" name="EMAIL" class="email" id="maillist-email" placeholder="{{ $email_text }}" title="{{ $email_title }}" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <div class="consent">
+                <input type="checkbox" id="gpdr" name="gdpr[16379]" value="Y" class="gpdr" required>
+                <label for="gpdr" title="{{ $consent_title }}" class="gpdr-label">{{ $consent_text }}</label>
+            </div>
+            <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                <input type="text" name="b_{{ $userid }}_{{ $audienceid }}" tabindex="-1" value="">
+            </div>
+            <div class="legalese">
+                <p>{{ T "maillist_legalese" (dict "Mailchimp" $mailchimp_link) | markdownify | safeHTML }}</p>
+            </div>
+            <button name="subscribe" title="{{ $submit_title }}">{{ $submit_text }}</button>
+
+        </div>
+    </form>
+</div>

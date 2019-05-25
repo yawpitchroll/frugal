@@ -1,0 +1,230 @@
+# home page
+[home_page_title]
+other = "Home"
+
+[home_link_text]
+other = "Enter"
+
+[home_link_title]
+other = "Go to {{ .Title }}"
+
+# 404 page
+[404_page_title]
+other = "{{ .Title }}"
+
+[404_link_text]
+other = "404, So Sorry"
+
+[404_link_title]
+other = "Return to {{ .Title }}"
+
+# common topbar elements
+[topbar_logo_title]
+other = "Home"
+
+[topbar_skip_text]
+other = "Skip to Main Content"
+
+[topbar_menu_title]
+other = "Go to {{ .Name }}"
+
+[topbar_hamburger_title]
+other = "Toggle Navigation Menu"
+
+[summary_title]
+other = "Read &ldquo;{{ .Title }}&rdquo;"
+
+[summary_read_more_text]
+other = "Read More..."
+
+[related_posts_label]
+one = "Related Post"
+other = "Related Posts"
+
+[bullet_title]
+other = "Read &ldquo;{{ .Title }}&rdquo;"
+
+
+[category_title]
+other = "See other posts in the category &ldquo;{{ .Category }}&rdquo;"
+
+[tag_title]
+other = "See other posts with the tag &ldquo;{{ .Tag }}&rdquo;"
+
+
+
+[rss_section_title]
+other = "Recent content in {{ .Title }} on {{ .Site }}"
+
+[rss_site_title]
+other = "Recent content on {{ .Site }}"
+
+
+[word_count]
+one = "1 Word"
+other = "{{ .Count }} Words"
+
+[read_time]
+one = "1 Min"
+other = "{{ .Count }} Mins"
+
+
+[paginator_first_title]
+other = "Skip to the first page"
+
+[paginator_previous_title]
+other = "Go to the previous page"
+
+[paginator_page_text]
+other = "{{ .Number }}"
+
+[paginator_page_title]
+other = "Go to the {{ .Nth }} page of {{ .Total }}"
+
+[paginator_next_title]
+other = "Go to the next page"
+
+[paginator_last_title]
+other = "Skip to the last page"
+
+
+
+[term_link_title]
+one = "Browse the 1 post in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
+other = "Browse the {{ .Count }} posts in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
+
+
+
+
+
+[social_share_text]
+other = "Share on {{ .Provider }}"
+
+[social_share_email_text]
+other = "Share in an E-Mail"
+
+[social_share_copy_title]
+other = "Click to copy the link for &ldquo;{{ .Title }}&rdquo;"
+
+
+
+# contact form
+[contact_form_text]
+other = "Send me a Message"
+
+[contact_email_text]
+other = "Enter your E-Mail"
+
+[contact_subject]
+other = "Message re: {{ .Permalink }}"
+
+[contact_message_text]
+other = "Enter your Message"
+
+[contact_formspree_text]
+other = "Formspree"
+
+[contact_formspree_title]
+other = "View Formspree's privacy policy"
+
+[contact_legalese]
+other = """
+Messages submitted via this form will be processed by {{ .Formspree }} and \
+forwarded to me for review and response. No contact details provided will be \
+added to my mailing list or collected for marketing purposes, except if you \
+choose to subscribe yourself using the form found elsewhere on this page."""
+
+[contact_submit_text]
+other = "Submit"
+
+[contact_submit_title]
+other = "Submit your message"
+
+
+# maillist form
+[maillist_form_text]
+other = "Subscribe to my Mailing List"
+
+[maillist_email_text]
+other = "Enter your E-Mail"
+
+[maillist_consent_text]
+other = "Consent to receive email updates"
+
+[maillist_mailchimp_text]
+other = "Mailchimp"
+
+[maillist_mailchimp_title]
+other = "View Mailchimp's privacy policy"
+
+[maillist_legalese]
+other = """
+By checking the box above and clicking below to subscribe you acknowledge \
+that your information will be processed by {{ .Mailchimp }}, and you further \
+consent to receive periodic E-Mail updates about this site.
+
+You can unsubscribe at any time by clicking the link provided in the footer \
+of all such updates.
+"""
+
+[maillist_submit_text]
+other = "Subscribe"
+
+[maillist_submit_title]
+other = "Submit your subscription request"
+
+
+
+# common footer elements
+[social_link_text]
+other = "Connect on {{ .Provider }}"
+
+[rss_link_text]
+other = "Subscribe via RSS"
+
+[hugo_link_text]
+other = "Hugo"
+
+[hugo_link_title]
+other = "Visit Hugo"
+
+[frugal_link_text]
+other = "Frugal"
+
+[frugal_link_title]
+other = "Visit Frugal"
+
+[powered_by_text]
+other = "Powered by {{ .Hugo }} and {{ .Frugal }}"
+
+[a11y_link_text]
+other = "Send Accessibility Feedback"
+
+[post_navigation_previous_title]
+other = "Read &ldquo;{{ .PrevInSection.Title }}&rdquo;"
+
+[post_navigation_next_title]
+other = "Read &ldquo;{{ .NextInSection.Title }}&rdquo;"
+
+[series_link_title]
+other = "See all of the &ldquo;{{ .Title }}&rdquo; series"
+
+[series_overview]
+one = "Part {{ .Index }} of the {{ .Link }} series"
+other = "Part {{ .Index }} of {{ .Count }} in the {{ .Link }} series"
+
+
+
+
+
+[clipboard_tooltip]
+other = "Copied!"
+
+[clipboard_unsupported]
+other = "No support"
+
+[clipboard_mac]
+other = "Press ⌘--C to copy"
+
+[clipboard_pc]
+other = "Press Ctrl-C to copy"

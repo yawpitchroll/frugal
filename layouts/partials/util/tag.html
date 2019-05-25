@@ -1,0 +1,2 @@
+{{- $title := T "tag_title" (dict "Tag" (title .)) -}}
+<a class="post-tag post-tag-{{ . | urlize }}" title="{{ $title | safeHTML }}"  href="/tags/{{ . | urlize }}">#{{ . }}</a>

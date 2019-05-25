@@ -1,0 +1,5 @@
+{{- $copyright := site.Copyright | default "{year} All Rights Reserved" -}}
+{{- $year := partial "util/year" now -}}
+{{- partial "nav/social" . }} 
+{{- partial "util/copyright" . }}
+{{- partial "a11y/feedback" . | chomp }} 

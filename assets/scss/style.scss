@@ -1,0 +1,2080 @@
+//// CROSS-BROWSER NORMALIZE
+@import-normalize;
+
+//// INJECT CODE HIGHLIGHTING
+// TODO: Figure out a way to disable this if pigmentsUseClasses is disabled
+@import "{{ site.Params.Frugal.Style.syntaxHighlightMode | default "light" }}";
+
+//// COMMON VARIABLES & HUGO CONFIGURATION
+// variables used throughout the style sheet
+$branding-accent: {{ site.Params.Frugal.Style.accentColor | default "#0379C4" }};
+
+$small-font: 0.875em;   // 14px
+$large-font: 1.375em;   // 22px
+
+//// COMMON MIXINS & FUNCTIONS
+// Fluid interpolation helpers via Mike Riethmuller - modified with defaults
+// See: https://www.madebymike.com.au/writing/fluid-type-calc-examples/
+// Interpolate the given properties from min-value to max-value fluidly with screen size
+$small-screen: 20em !default; // defaults to 320px @ 16px base font size
+$large-screen: 90em !default; // defaults to 1440px @ 16px base font size
+@mixin interpolate($properties_map, $start: $small-screen, $end: $large-screen) {
+    & {
+        @each $property, $values in $properties_map {
+			#{$property}: nth($values, 1);
+		}
+
+		@media screen and (min-width: $start) {
+			@each $property, $values in $properties_map {
+				#{$property}: calc-interpolation($start, nth($values, 1), $end, nth($values, 2));
+			}
+		}
+
+		@media screen and (min-width: $end) {
+            @each $property, $values in $properties_map {
+				#{$property}: nth($values, 2);
+			}
+		}
+	}
+}
+
+// Calculates the interpolated value between v1 and v2 fluidly with screen size
+@function calc-interpolation($start, $v1, $end, $v2) {
+	$a: ($v2 - $v1) / ($end - $start);
+	$b: $v1 - $a * $start;
+
+	$sign: "+";
+	@if ($b < 0) {
+		$sign: "-";
+		$b: abs($b);
+	}
+	@return calc(#{$a*100}vw #{$sign} #{$b});
+}
+
+// Helper to toggle items at a specified breakpoint
+@mixin exceeds($breakpoint) {
+    @media screen and (min-width: $breakpoint) {
+        @content
+    }
+}
+
+// Helper to toggle items at the navbar / sidebar breakpoint
+$navbar-breakpoint: 45em !default; // defaults to 720px @ 16px base font size
+@mixin toggle-navbar {
+    @media screen and (min-width: $navbar-breakpoint) {
+        @content
+    }
+}
+
+//// TYPOGRAPHY
+/// FONT HELPERS
+// sans-serif system font stack via github; includes emoji as this will be the body font
+%font-sans {
+    font-family: -apple-system, 
+                 BlinkMacSystemFont, 
+                 "Segoe UI", 
+                 Helvetica, 
+                 Arial, 
+                 sans-serif, 
+                 "Apple Color Emoji", 
+                 "Segoe UI Emoji", 
+                 "Segoe UI Symbol"; 
+}
+
+// serif system font stacks are hard to find; slightly modified this one from
+// https://www.client9.com/css-system-font-stack-serif-medium-v1/
+%font-serif {
+    font-family: "Iowan Old Style", 
+                 "Book Antiqua", 
+                 "Palatino Linotype", 
+                 Palatino, 
+                 "URW Palladio L", 
+                 "Georgia", 
+                 "Times New Roman", 
+                 serif;
+}
+
+// monospace system font stack via github
+%font-mono {
+    font-family: "SFMono-Regular", 
+                 Consolas, 
+                 "Liberation Mono", 
+                 Menlo, 
+                 Courier, 
+                 monospace;
+}
+
+// brand content in the main header, etc
+%font-brand {
+    @extend %font-mono;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+/// FLUID TYPOGRAPHY & VERTICAL RHYTHM
+body {
+    @extend %font-sans;
+	@include interpolate((
+	    font-size: ( $small-font, $large-font ),
+	    line-height: ( 1.6em, 1.4em ),
+    ));
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @extend %font-serif;
+    font-weight: 600;
+}
+
+h1 {
+    @include interpolate((
+    	font-size: ( 2.43em, 2.42em ),
+    	line-height: ( 1.18em, 1.14em ),
+        padding-top: ( 0.235em, 0.238em ),
+        margin-bottom: ( 0.353em, 0.333em ),
+    ));
+}
+
+h2 {
+    @include interpolate((
+    	font-size: ( 1.93em, 1.96em ),
+    	line-height: ( 1.48em, 1.41em ),
+        padding-top: ( 0.407em, 0.373em ),
+        margin-bottom: ( 0.333em, 0.333em ),
+    ));
+}
+
+h3 {
+    @include interpolate((
+    	font-size: ( 1.57em, 1.58em ),
+    	line-height: ( 1.82em, 1.76em ),
+        padding-top: ( 0.591em, 0.537em ),
+        margin-bottom: ( 0.318em, 0.341em ),
+    ));
+}
+
+h4 {
+    @include interpolate((
+    	font-size: ( 1.29em, 1.27em ),
+    	line-height: ( 1.11em, 1.09em ),
+        padding-top: ( 0.222em, 0.212em ),
+        margin-bottom: ( 0.889em, 0.879em ),
+    ));
+}
+
+h5,
+h6,
+p {
+    @include interpolate((
+    	line-height: ( 1.43em, 1.38em ),
+        padding-top: ( 0.357em, 0.346em ),
+        margin-bottom: ( 1.07em, 1.04em ),
+    ));
+	font-size: 1.00em;
+}
+
+h6 {
+    font-size: 0.8em;
+}
+
+pre,
+code {
+    @extend %font-mono;
+    @include interpolate((
+        font-size: ( 0.95em, 0.82em ),
+    ));
+}
+
+//// COMMON ELEMENT STYLING
+/// INLINE ELEMENTS
+// links
+%hover-transition {
+    transition-timing-function: ease-in-out;
+    transition: 200ms;
+}
+
+// accessability focus
+%focus-outline {
+    outline: 2px dotted $branding-accent;
+    outline-offset: 0.2rem;
+}
+
+// accesability focus when on dark
+%focus-inverted {
+    @extend %focus-outline;
+    outline-color: white;
+}
+
+// branded links
+%brand-hover {
+    @extend %hover-transition;
+    color: $branding-accent;
+    text-decoration: none;
+    border: none;
+    border-bottom: none;
+}
+
+// branded links with svg elements
+%brand-hover-svg {
+    @extend %brand-hover;
+    fill: $branding-accent;
+}
+
+a {
+    color: $branding-accent;
+    border-bottom: 1px dotted transparent;
+    text-decoration: none;
+
+    &:focus {
+        @extend %focus-outline;
+    }
+
+    &:hover {
+        @extend %hover-transition;
+        color: lighten($branding-accent, 20%);
+        border-bottom-color: lighten($branding-accent, 20%);
+        outline: none;
+    }
+}
+
+// keyboard
+kbd {
+    @extend %font-mono;
+    font-weight: 600;
+}
+
+// quotes
+q {
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+// abbreviations 
+abbr[title],
+abbr {
+    text-decoration: underline dotted $branding-accent;
+}
+
+// marked text
+mark {
+    background: transparent;
+    text-decoration: underline wavy $branding-accent;
+}
+
+// superscript and subscript
+sup,
+sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+    padding: 0 0.1rem;
+}
+
+sub {
+    top: 0.4em;
+}
+
+// special-case for inline <code> tags, Hugo likes to decorate a lot of stuff with <code>
+p code {
+    font-size: 1em;
+    font-weight: 300;
+}
+
+/// BLOCK ELEMENT STYLING
+// paragraph rendering and breaks
+p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+// horizontal rules
+hr {
+    border-style: dashed;
+    color: #ddd
+}
+
+// special-case indented (not ```-fenced) pre-formatted blocks
+pre:not(.chroma) {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+// definition lists
+dl {
+    margin: 0 1rem;
+
+    dt {
+        margin-top: 0.8em;
+        font-size: 1.2em;
+        font-weight: 400;
+        color: $branding-accent;
+        counter-reset: definition-counter;
+    }
+
+    dd {
+        margin: 0;
+        font-size: 0.9em;
+        font-weight: 200;
+
+        &:before {
+            content: counter(definition-counter) ". ";
+            counter-increment: definition-counter;
+            margin-right: 0.8em;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+    }
+}
+
+// blockquotes
+blockquote {
+    @extend %font-serif;
+    margin: 2.5rem 1.5rem;
+    padding: 0.6em 0.5em;
+    position: relative;
+    border-top: 0.2em solid rgba($branding-accent, 0.4);
+    border-bottom: 0.2em solid rgba($branding-accent, 0.4);
+
+    &:before {
+        position: absolute;
+        content:"\201C";
+        top: 0;
+        left: 0.8em;
+        font-size: 3em;
+        line-height: 0.6;
+        color: rgba($branding-accent, 0.4);
+        transform: translate(-50%, -50%);
+        width: 0.5em;
+        height: 0.25em; 
+        text-align: center;
+        background: white;
+    }
+
+    p {
+        font-size: 1em;
+        font-weight: 300;
+    }   
+
+    // nested blockquotes
+    blockquote {
+        margin-top: 0.5em;
+        font-size: 0.9em;
+        border-top: 0.2em solid rgba(#ddd, 0.2);
+        border-bottom: 0.2em solid rgba(#ddd, 0.2);
+
+        &:before {
+            color: rgba(#ddd, 0.2);
+        }
+    }
+    
+    // included citations
+    > cite {
+        position: relative;
+        font-weight: 100;
+
+        &:before {
+            content: "\2014";
+            margin-right: 0.2em;
+            font-weight: 100;
+        }
+    }
+}
+
+/// twitter shortcode uses a blockquote
+{{- $setup := index site.Data.social.share.twitter }}
+{{- $icon := resources.Get ( printf "svg/fontawesome/%s.svg" "twitter-brands" ) | minify | fingerprint }}
+blockquote.twitter-tweet {
+    border-left: none;
+    border-right: none;
+    border-color: black;
+    border-width: 0.25em;
+    padding-bottom: 2rem;
+    
+    &:before {
+        content: url({{ $icon.Permalink }});
+        height: 1em;
+        padding: 0 0.2em;
+    }
+}
+
+twitter-widget {
+    margin: auto;
+}
+
+/// COMMON ELEMENTS
+// accessability elements and links
+.screen-reader {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+.screen-reader-focusable:active,
+.screen-reader-focusable:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	white-space: normal;
+	width: auto;
+}
+
+// icons used in various locations
+/*! icons by fontawesome | https://fontawesome.com/license/free */
+.fontawesome {
+    display: inline-block;
+    height: auto;
+    width: 1.15em;
+    top: 0.15em;
+    position: relative;
+
+    &.calendar-solid {
+        width: 0.8em;
+        top: 0.06em;
+    }
+
+    &.folder-open-solid {
+        width: 1.3em;
+        top: 0.20em;
+        left: -0.18em;
+    }
+
+    &.tag-solid {
+        width: 0.9em;
+        top: 0.09em;
+        left: -0.10em;
+    }
+
+    &.file-alt-solid {
+        width: 0.7em;
+        top: 0.08em;
+    }
+
+    &.book-solid {
+        width: 0.8em;
+        top: 0.10em;
+    }
+
+    &.clock-solid {
+        width: 0.98em;
+        top: 0.12em;
+        left: -0.10em;
+    }
+}
+
+//// SPLASH PAGE CONTENT (index.html & 404.html)
+// splash page animations
+/* ----------------------------------------------
+ * Generated by Animista on 2019-2-7 19:59:43
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation bounce-in-top
+ * ----------------------------------------
+ */
+@keyframes bounce-in-top {
+  0% {
+    transform: translateY(-500px);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  38% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(-65px);
+    animation-timing-function: ease-in;
+  }
+  72% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  81% {
+    transform: translateY(-28px);
+    animation-timing-function: ease-in;
+  }
+  90% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  95% {
+    transform: translateY(-8px);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2019-2-8 14:25:45
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation fade-in
+ * ----------------------------------------
+ */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// splash page layout
+.splash {
+    overflow-y: hidden;
+
+    .site-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .site-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+}
+
+// main splash content
+.splash-main {
+    display: flex;
+    flex-direction: column;
+    
+    // navbar links
+    a {
+        color: black;
+
+        &:hover {
+            @extend %brand-hover-svg;
+        }
+    }
+
+
+    // navbar logo and site name
+    .branding {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        svg {
+            @include interpolate((
+                height: (6em, 12em),
+            ));
+            width: auto;
+	        animation: bounce-in-top 1500ms 600ms both;
+        }
+
+        .entry-text {
+            @extend %font-brand;
+            font-size: 1.2em;
+            line-height: 1;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-align: center;
+            padding-bottom: 2rem;
+	        animation: fade-in 3000ms cubic-bezier(0.390, 0.575, 0.565, 1.000) 2100ms both;
+
+            &:before {
+                content: "\007B";
+                position: relative;
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+
+            &:after {
+                content: "\007D";
+                position: relative;
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+// 404 only
+.splash-main.error {
+    a {
+        color: crimson;
+        fill: crimson;
+     
+        &:hover {
+            @extend %brand-hover-svg;
+        }
+    }
+}
+
+//// BASEOF PAGE CONTENT (COMMON TO ALL NON-SPLASH PAGES)
+// clear styling for the hamburger button (and any other buttons)
+button {
+    display: inline-block;
+    border: none;
+    margin: 0;
+    text-decoration: none;
+    background: transparent;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    appearance: none;
+
+    &:hover,
+    &:focus {
+        background: transparent;
+    }
+
+    &:active,
+    &:focus {
+        @extend %focus-outline;
+    }
+}
+
+#hamburger {
+    display: none;
+}
+
+{{ $height := mul 4.0 (len site.Menus.main) | math.Round }}
+#hamburger:checked ~ .topbar {
+    height: {{ $height }}em;
+}
+
+label[for="hamburger"] {
+    position: absolute;
+    z-index: 10001;
+    top: 1.05rem;
+    right: 2rem;
+	cursor: pointer;
+	tap-highlight-color: transparent;
+    font-size: 1.1em;
+
+    @include toggle-navbar {    
+        display: none;
+    }
+
+    &:hover {
+        @extend %brand-hover-svg;
+    }
+
+}
+
+.topbar {
+    @extend %font-brand;
+    position: default;
+    z-index: 10000;
+    width: 100%;
+    height: 0;
+    top: 0;
+    left: 0;
+    min-height: 3.0rem;
+    font-size: 1.2rem;
+    background: white;
+    fill: black;
+    overflow: hidden;
+    transition: height 200ms ease-in-out 0s;
+
+    @include toggle-navbar {
+        position: fixed;
+        min-height: 3.6rem;
+        box-shadow: 0 0.2rem 0.02rem rgba(#777, 0.3);
+    }
+
+    .navbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0;
+        padding: 0 2rem;
+        
+        @include toggle-navbar {    
+            justify-content: space-between;
+        }
+    }
+
+    // navbar links
+    a {
+        color: black;
+
+        &:hover {
+            @extend %brand-hover-svg;
+        }
+    }
+
+    // navbar logo and site name, plus skip link
+    .logo {
+        flex: 1 0 100%;
+        padding: 1rem 0;
+        padding-top: 0.6rem;
+        
+        @include toggle-navbar {    
+            flex-basis: auto;
+            padding-top: 1.2rem;
+        }
+
+        .branding {
+           text-align: left;
+    
+           svg {
+               height: 1.2rem;
+               width: auto;
+               vertical-align: middle;
+               padding-bottom: 0.10rem;
+               padding-right: 0.8rem;
+           }
+        }
+
+        .screen-reader {
+            font-size: 0.5em;
+
+            @include toggle-navbar {    
+                font-size: 1em;
+            }
+        }
+
+    }
+
+    // navbar links
+    .navlinks {
+        flex: 0 0 100%;
+        padding: 1rem 0;
+        white-space: nowrap;
+
+        @include toggle-navbar {    
+            flex-basis: auto;
+        }
+
+        .items {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            padding: 1rem 0;
+            margin: 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+
+            @include toggle-navbar {
+                display: inline-block;
+                text-align: right;
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
+
+            .item {
+                display: inline-block;
+                padding: 0.4rem 1.4rem;
+
+                @include toggle-navbar {
+                    padding: 0;
+                    padding-right: 0.7rem;
+                }
+            }
+        }
+    }
+
+    // navbar toggle for sidebar (small screens)
+    .toggle {
+        flex: 1 0 0;
+        padding-right: 2rem;
+        display: inline-block;
+        text-align: right;
+        cursor: pointer;
+
+        @include toggle-navbar {    
+            display: none;
+        }
+
+        &:hover {
+            @extend %brand-hover-svg;
+        }
+    }
+}
+
+// centered column div
+.site-content {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 18rem;
+    max-width: 55rem;
+    height: 100vh;
+}
+
+// the <main> container on each page
+.site-main {
+    padding: 0 1.25rem;
+    flex: 1 0 auto;
+    // padding at end of article
+    padding-bottom: 5rem;
+
+    @include toggle-navbar {
+        padding-bottom: 0;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+// this is a Hugo Block that can be overloaded by each template
+// for single pages it's the <article> itself
+// for list and term pages it's a <section>
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    height: 100%;
+}
+
+// the main header at the top of each page's content
+.main-header {
+    padding-top: 1.0rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    padding-bottom: 2rem;
+    border-bottom-right-radius: 0.4rem;
+    border-bottom-left-radius: 0.4rem;
+    background-image: linear-gradient(0deg, $branding-accent, lighten($branding-accent, 40%));
+    box-shadow: 0 0.4rem 0.4rem rgba(70, 70, 70, 0.3);
+    display: flex;
+    flex-flow: column nowrap;
+
+    .title {
+        margin: 0;
+        color: white;
+    }
+
+    @include toggle-navbar {
+        padding-top: 4.6rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+// this is where the Page.Content will be written
+.post-content {
+    flex: 1 0 auto;
+}
+
+// keep the footer at the bottom of the page
+// templates can add to this with a block overload
+.main-footer {
+    flex-shrink: 0;
+}
+
+// common footer with social links
+.site-footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 1rem;
+
+    @include toggle-navbar {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    // social link items
+    .social-items {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+
+        a {
+            color: black;
+
+            &:hover {
+                @extend %brand-hover;
+            }
+        }
+
+        .social-item {
+            display: inline-block;
+            padding: 0 0.50rem;
+
+            .fontawesome {
+                height: 1.6rem;
+                width: 1.6rem;
+            }
+        }
+    }
+
+    .copyright {
+        @extend %font-brand;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+        align-items: baseline;
+        font-size: 0.55rem;
+        padding: 0.2rem 0;
+        margin: 0;
+
+        .notice {
+
+            padding: 0 0.4rem;
+            
+            &:before {
+                content: "\00A9";
+                font-size: 1.4em;
+                position: relative;
+                top: 0.08em;
+                padding-right: 0.2em;
+            }
+        }
+
+        .powered {
+            //margin-left: 2rem;
+        }
+
+        @include toggle-navbar {
+            font-size: .85rem;
+        }
+    }
+}
+
+//// SINGLE PAGES & POSTS
+// metadata for the header of each post page
+.post-metadata {
+    font-size: 0.70em;
+    text-transform: uppercase;
+    color: #eee;
+
+    a {
+        color: #eee;
+        border-bottom: 1px dotted transparent;
+
+        &:focus {
+            @extend %focus-inverted;
+        }
+
+        &:hover {
+            @extend %hover-transition;
+            color: white;
+            border-bottom: 1px dotted white;
+        }
+    }  
+
+    .items {
+        padding: 0;
+        padding-top: 0.6rem;
+        margin: 0;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: baseline;
+        line-height: 1.6;
+
+        @include toggle-navbar {
+            flex-direction: row;
+        }
+    }
+
+    .item {
+        display: inline-block;
+        padding-right: 0.6rem;
+        padding-bottom: 0.2rem;
+
+        &:last-of-type {
+            padding-right: 0;
+        }
+
+        .fontawesome {
+            padding-right: 0.4em;
+        }
+    }
+
+    .series {
+        font-size: 1.1em;
+        font-weight: 300;
+        padding: 0;
+        padding-top: 0.2em;
+        margin: 0;
+        margin-top: 0.2em;
+        hyphens: none;
+
+        @include toggle-navbar {
+            font-size: 1.5em;
+        }
+
+        a {
+            font-weight: 700;
+        }
+    }
+}
+
+/// COMMON ELEMENTS OF SINGLE PAGES
+// ordered lists
+.post-content ol {
+    list-style: none;
+    counter-reset: ol-counter;
+    padding: 0;
+    list-style-position: inside;
+
+    > li {
+        counter-increment: ol-counter;
+        padding-left: 1rem;
+
+        p:first-of-type {
+            display: inline;
+        }
+
+        &:before {
+            margin-right: 0.2em;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        &:not([id^="fn:"]):before {
+            content: counters(ol-counter, ".") ". ";
+        }
+
+        &[id^="fn:"]:before {
+            content: counter(ol-counter) ". ";
+        }
+    }
+}
+
+// unordered lists
+.post-content ul:not(.task-list) {
+    padding: 0;
+    list-style-position: inside;
+
+    > li {
+        padding-left: 1rem;
+
+        p:first-of-type {
+            display: inline;
+        }
+    }
+}
+
+// github-style task lists
+.task-list { 
+    list-style: none;
+
+    padding: 0 1rem;
+    margin: 0.4rem 0;
+    padding: 0 1rem;
+
+    li {
+        vertical-align: middle;
+        padding: 0.5rem;
+        border: 1px solid #eee;
+        border-left: 0.3em double #ddd;
+        border-right: 0.3em double #ddd;
+
+    }
+
+    label {
+        font-weight: 500;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    & input[type="checkbox"] {
+        appearance: none;
+        background-color: #fafafa;
+        border: 1px solid #cacece;
+        border-radius: 0.1rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+        padding: 0.8em;
+        margin-right: 1em;
+        position: relative;
+
+        &:checked {
+            background-color: #e9ecee;
+            border: 1px solid #adb8c0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+            color: #99a1a7;
+        } 
+    }
+}
+
+// syntax-highlighted code blocks
+.highlight {
+    margin: 1rem 0;
+    width: 100%;
+
+    > pre.chroma {
+        margin: 0;
+        width: 100%;
+        overflow-x: auto;
+
+        border: 1px solid #ddd;    
+
+        > code {
+            display: block;
+            padding: 1rem 1.5rem;
+        }
+    }
+
+    > div.chroma {
+        border: 1px solid #ddd;
+    }
+
+    > div.chroma .lntable {
+        width: auto;
+
+        tr {
+            .lntd {
+                padding: 0;
+
+                &:first-child {
+                    text-align: right;
+                }
+
+                &:last-child {
+                    width: 100%;
+                }
+            }
+
+            .lnt {
+                padding-left: 1.5rem;
+                padding-right: 0.8rem;
+            }
+        }
+    }
+}
+
+// tables (but not the ones used for highlighted code)
+table:not(.lntable) {
+    font-size: 0.8em;
+    margin: 1rem auto;
+    display: table;      
+    vertical-align: top;
+    width: auto;
+    white-space: nowrap;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    thead, th {
+        background: desaturate($branding-accent, 40%);
+    }
+
+    th {
+        text-align: left;
+        text-transform: uppercase;
+        border: 1px solid black;
+        color: white;
+    }
+
+    tfoot {
+        background: #ddd;
+    }
+
+    tr {
+        &:nth-child(even) {
+            background: #eee;
+        }
+
+        &:hover {
+            background: desaturate(lighten($branding-accent, 40%), 60%);
+        }
+    }
+
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        @include interpolate((
+            padding-left: (0.5em, 1em),
+            padding-right: (0.5em, 1em),
+        ));
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+
+        &:last-of-type {
+            width: 100%;
+        }
+
+    }
+}
+
+// width-limited tables using the table shortcode
+.table {
+    overflow-x: auto;
+}
+
+// in-post footnotes
+.footnote-ref {
+    font-weight: bold;
+    padding-left: 0.2rem;
+
+    > a {
+        &:before { 
+            content: "\005B";
+        }
+
+        &:after { 
+            content: "\005D";
+        }
+    }
+}
+
+.footnote-return {
+    font-weight: bold;
+}
+
+/// RELATED POSTS LIST
+.post-related {
+    flex-shrink: 1;
+    border-top: 0.1rem solid #ccc;
+	border-bottom: 0.1rem solid #ddd;
+    box-shadow: inset 0 0.2rem 0 0 white, inset 0 0.3rem 0 0 #ddd, 0 0.2rem 0 0 white, 0 0.25rem 0 0 #ccc;
+
+    .related {
+        text-transform: uppercase;
+        text-align: left;
+        font-size: 1.0em;
+        font-weight: 300;
+        line-height: 0.4;
+        letter-spacing: 0.1em;
+        padding: 0 0.5em;
+        padding-top: 1em;
+
+        &:before {
+            content: "\219D";
+            font-size: 1.2em;
+            position: relative;
+            left: -0.2em;
+            color: darken($branding-accent, 10%);
+        }
+    }
+
+    .bullets {
+        @extend %font-brand;
+        font-size: 0.9em;
+        font-weight: 400;
+        padding: 0;
+
+        .bullet {
+            display: block;
+            padding: 0 2em;
+            line-height: 1.8;
+        
+            .date {
+                font-size: 0.8em;
+            
+                @include toggle-navbar {
+                    font-size: 1em;
+                }
+
+                .fontawesome {
+                    padding-right: 0.8em;
+                }
+            }
+
+            .title {
+                display: block;
+                padding-left: 0.6rem;
+            
+                @include toggle-navbar {
+                    display: inline;
+                    padding-left: 1.4rem;
+                }
+            }
+
+            &:focus-within {
+                @extend %focus-outline;
+            }
+        
+            &:hover:focus-within {
+                outline: none;
+            }
+             
+            a {
+                color: desaturate(darken($branding-accent, 35%), 15%);
+                display: block;
+                min-height: 2.5rem;
+                vertical-align: middle;
+                border: none;
+
+                &:focus {
+                    outline: none;
+                }
+        
+                &:hover {
+                    @extend %brand-hover;
+                }
+            }
+        }
+    }   
+}
+
+/// POST SHARING
+// social share links
+.post-share {
+    padding: 0rem 0;
+    padding-top: 1rem;
+
+    .title {
+        display: block;
+        padding: 0.2rem 0.95rem;
+        margin: 0;
+        border: 1px solid #333;
+        border-top-left-radius: 0.3rem;
+        border-top-right-radius: 0.3rem;
+        background: #333;
+        color: white;
+        font-size: 0.65em;
+        line-height: 1;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .items {
+        display: flex;
+        align-items: stretch;
+        align-content: center;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    button + .item {
+        padding: 1rem;
+    }
+
+    .item {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #333;
+        border-right: none;
+        width: 2rem;
+        flex: 1 auto 2rem;
+
+        background-size: 0.75rem;
+        background-repeat: no-repeat;
+        background-position: 0.75rem;
+
+        &:focus {
+            @extend %focus-outline;
+        }
+
+        &:first-child {
+            border-bottom-left-radius: 0.3rem;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 0.3rem;
+            border-right: 1px solid #333;
+        }
+    }
+
+    // add styles for social share providers chosen in config.toml
+    // each is configured using /data/social/share/$provider.toml
+    {{ with site.Params.Frugal.Social.share }}
+    {{- range sort . "weight" "asc" }}
+    {{- $setup := index site.Data.social.share .provider }}
+    {{- $icon := resources.Get ( printf "svg/fontawesome/%s.svg" $setup.icon ) | minify | fingerprint }}
+    .{{ .provider }} {
+        background-image: url('{{ $icon.Permalink }}');
+        {{ with $setup.size_factor }}
+        background-size: 0.75rem * {{ . }};
+        {{ end }}
+        {{ with $setup.color }}
+        background-color: {{ . }};
+        {{ end }}
+        // special case that damned bird
+        {{ if eq .provider "twitter" }}
+        background-position: 0.6rem;
+        {{ end }}
+
+        {{ with $setup.color }}
+        &:hover {
+            background-color: darken({{ . }}, 15%);
+        }
+        {{ end }}
+    }
+    {{- end }}
+    {{- end }}
+
+    // add style for social share email as configured in data/social/share/email.toml
+    // add style for social share email as configured in data/social/share/email.toml
+    {{- with site.Data.social.share.email }}
+    {{- $icon := resources.Get ( printf "svg/fontawesome/%s.svg" .icon ) | minify | fingerprint }}
+    .email {
+        background-image: url('{{ $icon.Permalink }}');
+        {{ with .size_factor }}
+        background-size: 0.75rem * {{ . }};
+        {{ end }}
+        {{ with .color }}
+        background-color: {{ . }};
+        {{ end }}
+
+        {{ with .color }}
+        &:hover {
+            background-color: darken({{ . }}, 15%);
+        }
+        {{ end }}
+
+    }
+    {{- end }}
+
+    // add style for social share link as configured in data/social/share/link.toml
+    {{- with site.Data.social.share.link }}
+    {{- $icon := resources.Get ( printf "svg/fontawesome/%s.svg" .icon ) | minify | fingerprint }}
+    .link {
+        user-select: all;
+        height: 2rem;
+        background-size: 0.75rem;
+        background-repeat: no-repeat;
+        background-position: 0.75rem;
+
+        background-image: url('{{ $icon.Permalink }}');
+        {{ with .size_factor }}
+        background-size: 0.75rem * {{ . }};
+        {{ end }}
+        {{ with .color }}
+        background-color: {{ . }};
+        {{ end }}
+
+        flex: 666 0 1rem;;
+
+        min-width: 1rem;
+
+        display: flex;
+        align-items: center;
+
+        color: $branding-accent;
+
+        {{ with .color }}
+        &:hover {
+            background-color: darken({{ . }}, 15%);
+            color: black;
+        }
+        {{ end }}
+
+        a,
+        .text {
+            display: block;
+            padding-left: 2.2rem;
+            padding-right: 1.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 400;
+            font-size: 1em;
+            border: none;
+
+            &:hover {
+                border: none;
+            }
+        }
+    }
+    {{- end }}
+}
+
+// tooltip for copy to clipboard
+.tooltip {
+    position: relative
+}
+
+.tooltip:after {
+    position: absolute;
+    z-index: 1000000;
+    display: none;
+    padding: 0.3rem 0.5rem;
+    font-weight: 400;
+    font-size: 0.7em;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    word-wrap: break-word;
+    white-space: pre;
+    pointer-events: none;
+    content: attr(aria-label);
+    background: rgba(0, 0, 0, .8);
+    border-radius: 0.3rem;
+    top: 100%;
+    right: 50%;
+    margin-top: 0.3rem;
+    transform: translateX(50%);
+}
+
+.tooltip:before {
+    position: absolute;
+    z-index: 1000001;
+    display: none;
+    width: 0;
+    height: 0;
+    color: rgba(0, 0, 0, .8);
+    pointer-events: none;
+    content: "";
+    border: 5px solid transparent;
+
+    top: auto;
+    right: 50%;
+    bottom: -0.3rem;
+    margin-right: -0.3rem;
+    border-bottom-color: rgba(0, 0, 0, .8);
+}
+
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:active:before,
+.tooltip:active:after,
+.tooltip:focus:before,
+.tooltip:focus:after {
+    display: inline-block;
+    text-decoration: none
+}
+
+/// DROPDOWNS FOR EMAIL AND MAIL LIST SUBSCRIPTION
+{{- $good := resources.Get "svg/fontawesome/check-solid.svg" | minify | fingerprint }}
+{{- $bad := resources.Get "svg/fontawesome/times-solid.svg" | minify | fingerprint }}
+.expandable {
+    margin: 1rem 0; 
+    padding: 1rem;
+    border: 1px solid #333;
+    border-radius: 0.3rem;
+    font-size: 0.8em;
+
+    .title {
+        display: block;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1.1em;
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        line-height: 1;
+        cursor: pointer;
+    	tap-highlight-color: transparent;
+        margin: -1rem;
+        padding: 1rem;
+        
+        &:hover {
+            @extend %brand-hover;
+        }
+
+    }
+
+    .toggle {
+        display: none;
+    }
+
+    form {
+        transition: height 200ms ease-in-out 0s;
+        height: 0;
+        overflow: hidden;
+        padding: 0 0.4rem;
+        padding-bottom: 0.2rem;
+        display: flex;
+        justify-content: center;
+        
+        @include toggle-navbar {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
+    .contents {
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        width: 100%;
+
+        @include toggle-navbar {
+            padding-top: 2rem;
+        }
+    }
+
+    .legalese {
+        flex: 2 0 0;
+        font-size: 1em;
+        font-weight: 200;
+        padding: 0;
+        margin-bottom: 0.5rem;
+        
+        p {
+            margin: 0.5em 0;
+            line-height: 1;
+            hyphens: none;
+        }
+    }
+
+    input,
+    button {
+        margin: 0.2rem 0;
+        box-sizing: border-box;
+        padding: 0.2rem 0.6rem;
+        border-radius: 0.3rem;
+        flex: 0 0 2.5rem;
+
+        @include toggle-navbar {
+            flex: 0 0 3rem;
+        }
+    }
+
+    input,
+    textarea {
+        color: #333;
+        background-color: #fff;
+        background-position: 98%;
+        background-repeat: no-repeat;
+        background-size: 0.8rem;
+
+        @include toggle-navbar {
+            background-size: 1rem;
+        }
+
+        &:hover {
+            outline: none;
+        }
+
+        &:focus {
+            @extend %focus-outline;
+        }
+    }
+
+    textarea:valid,
+    input:valid {
+        border: 3px solid green;
+    }
+
+    input:valid {
+        background-image: url('{{ $good.Permalink }}');
+    }
+
+    textarea:invalid,
+    input:invalid {
+        border: 3px solid red;
+    }
+
+    input:invalid {
+        background-image: url('{{ $bad.Permalink }}');
+    }
+    
+    button {
+        color: #fff;
+        text-transform: uppercase;
+        
+        &:enabled {
+            background: darken($branding-accent, 15%);
+
+            &:hover {
+                background: $branding-accent;
+            }
+        }
+    }
+}
+
+// contact form
+.contactform {
+    #contact-toggle:checked ~ form {
+       height: 23rem;
+
+       @include toggle-navbar {
+           height: 27rem;
+       }
+    }
+
+    .gotcha {
+        display: none;
+    }
+
+    .message {
+        flex: 2 0 auto;
+        margin-top: 1em;
+    }
+
+    input,
+    textarea {
+        margin: 0;
+        padding: 0.875em 0;
+        width: 100%;
+        line-height: 1.5;
+    }
+
+    textarea,
+    textarea:valid,
+    textarea:invalid,
+    input,
+    input:valid,
+    input:invalid {
+        border-radius: 0;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+    }
+
+    textarea {
+        height: 8rem;
+        overflow: auto;
+    }
+}
+
+// mailing list subscriptions
+.maillist {
+    background: #333;
+    color: white;
+
+    .title:hover {
+        color: lighten($branding-accent, 40%);
+    }
+
+    #maillist-toggle:checked ~ form {
+       height: 16.5rem;
+
+       @include toggle-navbar {
+           height: 21rem;
+       }
+    }
+
+    .consent {
+        padding: 0.2rem 0;
+
+        .gpdr {
+            vertical-align: middle;
+            position: relative;
+            bottom: -0.2em;
+        }
+
+        label {
+            position: relative;
+            bottom: -0.15em;
+            vertical-align: middle;
+            padding-left: 0.3em;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+    }
+}
+
+/// NAVIGATION BETWEEN POSTS
+.post-nav {
+    @extend %font-brand;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 1rem;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+    color: #595959;
+     
+    .fontawesome {
+        height: 1.0rem;
+        width: 1.0rem;
+        top: 0.1rem;
+    }
+
+    a {
+        color: #595959;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border: none;
+
+        &:hover {
+            @extend %brand-hover;
+        }
+    }
+
+    .title {
+        flex: 1 0 auto;
+        min-width: 0;
+        max-width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @include toggle-navbar {
+            max-width: default;
+            overflow: default;
+            text-overflow: default;
+            white-space: default;
+
+            &:before {
+                content: open-quote;
+                padding-left: 0.6rem;
+            }
+
+            &:after {
+                content: close-quote;
+                padding-right: 0.6rem;
+            }
+        }
+    }
+    
+    .previous,
+    .next {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        
+        .spacer {
+            color: transparent;
+        }
+    }
+
+    .nomore {
+        display: none;
+    }
+
+    @include toggle-navbar {
+        font-size: 0.9em;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+
+        a {
+            display: block;
+        }
+
+        .previous,
+        .next {
+            width: 50%;
+            
+            .spacer {
+                display: none;
+            }
+        }
+
+        .previous {
+            text-align: left;
+        }
+
+        .next {
+            text-align: right;
+        }
+
+        .nomore {
+            display: block;
+        }
+    }
+}
+
+
+//// TERM / LIST PAGE CONTENT
+.summaries {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.summary {
+    display: block;
+    padding: 0.5rem 0;
+
+    &:first-of-type {
+        padding-top: 0;
+    }
+
+    &:focus-within {
+        @extend %focus-outline;
+    }
+
+    &:hover:focus-within {
+        outline: none;
+    }
+
+    a {
+        color: black;
+
+        &:focus {
+            outline: none;
+        }
+        
+        &:hover {
+            @extend %brand-hover;
+        }
+    }
+
+    .metadata {
+        font-size: 0.7em;
+        padding-top: 0.2rem;
+        text-transform: uppercase;
+
+        @include toggle-navbar {
+            font-size: 0.85rem;
+        }
+
+        .items {
+            padding: 0;
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+
+            .item {
+                display: inline-block;
+                padding-right: 0.6rem;
+                padding-bottom: 0.2rem;
+
+                i {
+                    padding-right: 0.3rem;
+                }
+
+                &:last-of-type {
+                    padding-right: 0;
+                }
+
+                .fontawesome {
+                    padding-right: 0.4em;
+                }
+            }
+        }
+    }
+
+
+    .title {
+        font-size: 1.4em;
+        font-weight: 400;
+        padding: 0;
+        margin: 0;
+    }
+
+    .body {
+        font-size: 0.90em;
+        font-weight: 200;
+        padding: 0 0.4rem;
+        padding-top: 0.2rem;
+        margin: 0;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .readmore {
+        font-size: 0.8em;
+        font-weight: 400;
+        text-align: right;
+    }
+}
+
+/// PAGINATION
+.pagination {
+    @extend %font-brand;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: #595959;
+    padding: 0;
+    margin-bottom: 0;
+    text-align: center;
+
+    @include toggle-navbar {
+        font-size: 1.0em;
+    }
+
+    a {
+        border: none;
+    }
+
+    .active {
+        color: black;
+
+        &:before {
+            content: "\007B";
+        }
+
+        &:after {
+            content: "\007D";
+        }
+    }
+
+    .item {
+        display: inline-block;
+        flex: 1 0 1.5rem;
+
+        @include toggle-navbar {
+            flex: 1 0 2rem;
+        } 
+    }
+
+    .spacer {
+        display: inline-block;
+        flex: 666;
+    }
+}
+
+
+/// TAXONOMY PAGE CONTENT (WORD CLOUD GENERATED ON THE FLY)
+.terms {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: space-around;
+    padding: 0 2rem;
+}
+
+{{- range $taxon, $taxonomy := site.Taxonomies -}}
+{{- $counts := slice -}}
+{{- $taxon := $taxon | singularize | anchorize | urlize -}}
+{{- range $key, $value := $taxonomy -}}
+{{- $count := len $value.Pages -}}
+{{- $counts = $counts | append $count -}}
+{{- end -}}
+{{- $counts := sort (uniq $counts) -}}
+{{- $nums := len $counts -}}
+{{- $low := index $counts 0 -}}
+{{- $high := index $counts (sub $nums 1) }}
+{{- range $count := $counts }}
+{{- $selector := printf ".%s-%d" $taxon $count -}}
+{{- if (gt $high $low) -}}
+{{- $norm := div (sub (float $count) $low) (sub $high $low) -}}
+{{- $dnorm := add (mul $norm (sub 4 1)) 1 -}}
+{{ $selector }} {
+    display: block;
+    padding: 0.8rem 0.3rem;
+    font-size: 0.6rem * {{ $dnorm }};
+
+    @include toggle-navbar {
+        font-size: 1rem * {{ $dnorm }};
+    }
+}
+{{- else if (eq $high $low) -}}
+{{ $selector }} {
+    display: block;
+    padding: 0.8rem 0.3rem;
+    font-size: 0.6rem;
+
+    @include toggle-navbar {
+        font-size: 1rem;
+    }
+}
+{{- end -}}
+{{- end -}}
+{{- end }}

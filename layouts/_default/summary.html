@@ -1,0 +1,27 @@
+<li class="summary">
+    {{- $title := T "summary_title" . }}
+    <a href="{{ .Permalink }}" title="{{ $title | safeHTML }}">
+        <article class="content">
+            <header class="header">
+                <div class="metadata">
+                    <ul class="items">
+                        {{- with .Params.date }}
+                        <li class="item">{{ partial "util/published" . | chomp }}</li>
+                        {{- end }}
+                        <li class="item">{{ partial "util/wordcount" . | chomp }}</li>
+                        <li class="item">{{ partial "util/readingtime" . | chomp }}</li>
+                    </ul>
+                </div>
+                <h1 class="title">{{ .Title }}</h1>
+            </header>
+            <div class="body">
+                <p>{{ .Summary | htmlUnescape | plainify }}</p>
+            </div>
+            {{- if .Truncated -}}
+            <footer class="readmore">
+                {{ T "summary_read_more_text" . }}
+            </footer>
+            {{- end }}
+        </article>
+    </a>
+</li>

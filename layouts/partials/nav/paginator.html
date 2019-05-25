@@ -1,0 +1,70 @@
+{{- $pag := $.Paginator }}
+{{- if gt $pag.TotalPages 1 }}
+<ul class="pagination">
+    {{- with $pag.First }}
+    <li class="item">
+        {{- if $pag.HasPrev -}}
+        {{- $title := T "paginator_first_title" $pag }}
+        <a href="{{ .URL }}" aria-label="{{ $title }}" title="{{ $title }}"><span aria-hidden="true">{{- partial "util/fontawesome" "fast-backward-solid" | chomp -}}</span></a>
+        {{- else -}}
+        <span aria-hidden="true">{{- partial "util/fontawesome" "fast-backward-solid" | chomp -}}</span>
+        {{- end -}}
+    </li>
+    {{- end }}
+    <li class="item">
+      {{- if $pag.HasPrev -}}
+      {{- $title := T "paginator_previous_title" $pag }}
+      <a href="{{ $pag.Prev.URL }}" aria-label="{{ $title }}" title="{{ $title }}"><span aria-hidden="true">{{ partial "util/fontawesome" "backward-solid" | chomp }}</span></a>
+      {{- else -}}
+      <span aria-hidden="true">{{ partial "util/fontawesome" "backward-solid" | chomp }}</span>
+      {{- end -}}
+    </li>
+    <li class="spacer"></li>
+    {{- $.Scratch.Set "__paginator.ellipsed" false -}}
+    {{- range $pag.Pagers -}}
+    {{- $right := sub .TotalPages .PageNumber -}}
+    {{- $showNumber := or (le .PageNumber 3) (eq $right 0) -}}
+    {{- $showNumber := or $showNumber (and (gt .PageNumber (sub $pag.PageNumber 2)) (lt .PageNumber (add $pag.PageNumber 2))) -}}
+    {{- if $showNumber -}}
+        {{- $.Scratch.Set "__paginator.ellipsed" false -}}
+        {{- $.Scratch.Set "__paginator.shouldEllipse" false -}}
+    {{- else -}}
+        {{- $.Scratch.Set "__paginator.shouldEllipse" (not ($.Scratch.Get "__paginator.ellipsed") ) -}}
+        {{- $.Scratch.Set "__paginator.ellipsed" true -}}
+    {{- end -}}
+    {{- if $showNumber }}
+    <li class="item">
+        {{- if ne . $pag -}}
+        {{- $details := dict "Number" .PageNumber "Nth" (humanize .PageNumber) "Total" .TotalPages }}
+        {{- $text := T "paginator_page_text" $details }}
+        {{- $title := T "paginator_page_title" $details }}
+        <a href="{{ .URL }}" title="{{ $title }}">{{ $text }}</a>
+        {{- else -}}
+        <span class="active">{{ .PageNumber }}</span>
+        {{- end -}}
+    </li>
+    {{- else if ($.Scratch.Get "__paginator.shouldEllipse") }}
+    <li class="item"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    {{- end -}}
+    {{- end }}
+    <li class="spacer"></li>
+    <li class="item">
+        {{- if $pag.HasNext -}}
+        {{- $title := T "paginator_next_title" $pag }}
+        <a href="{{ $pag.Next.URL }}" aria-label="{{ $title }}" title="{{ $title }}"><span aria-hidden="true">{{- partial "util/fontawesome" "forward-solid" | chomp -}}</span></a>
+        {{- else -}}
+        <span aria-hidden="true">{{ partial "util/fontawesome" "forward-solid" | chomp }}</span>
+        {{- end -}}
+    </li>
+    {{- with $pag.Last }}
+    <li class="item">
+        {{- if $pag.HasNext -}}
+        {{- $title := T "paginator_last_title" $pag }}
+        <a href="{{ .URL }}" aria-label="{{ $title }}" title="{{ $title }}"><span aria-hidden="true">{{- partial "util/fontawesome" "fast-forward-solid" | chomp -}}</span></a>
+        {{- else -}}
+        <span aria-hidden="true">{{ partial "util/fontawesome" "fast-forward-solid" | chomp }}</span>
+        {{- end -}}
+    </li>
+    {{- end }}
+</ul>
+{{- end }}

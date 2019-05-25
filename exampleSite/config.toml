@@ -1,0 +1,190 @@
+## BASIC SITE CONFIGURATION
+baseURL = "https://example.com"
+theme = "frugal"
+defaultContentLanguage = "en"
+
+
+## ANALYTICS CONFIGURATION
+googleAnalytics = ""                        # enter your Google Anayltics ID to enable
+
+
+## SYNTAX HIGHLIGHTING CONFIGURATION
+pygmentsUseClasses = true                   # must be true; enabled Frugal syntax highlighting
+pygmentsCodeFences = true                   # should be true; enables Github-style code fences
+pygmentsCodeFencesGuessSyntax = false       # should be false; has never worked properly 
+pygmentsStyle = ""                          # should be empty; Frugal ignores this setting
+#pygmentsOptions = "linenos=table"          # uncomment if you ALWAYS want linenos
+
+
+## DEMO SITE CONFIGURATION
+paginate = 4
+footnoteReturnLinkContents = "↑"
+
+
+## PRIVACY CONFIGURATION (https://gohugo.io/about/hugo-and-gdpr/)
+[privacy.disqus]
+    disable = false
+
+[privacy.googleAnalytics]
+    anonymizeIP = true
+    disable = false
+    respectDoNotTrack = true
+    useSessionStorage = true
+
+[privacy.instagram]
+    disable = false
+    simple = true
+
+[privacy.twitter]
+    disable = false
+    enableDNT = true
+    simple = true
+
+[privacy.vimeo]
+    disable = false
+    simple = true
+
+[privacy.youtube]
+    disable = false
+    privacyEnhanced = true
+
+
+## LANGUAGES CONFIGURATION
+[languages.en]
+    weight = 0
+    languageName = "English"
+    title = "Frugal"
+    copyright = "2019 Frugal Designers"     # use first applicable copyright year
+    description = "A fast, relatively lightweight, code-friendly technical blogging theme for Hugo."
+
+
+## TAXONOMIES CONFIGURATION
+[taxonomies]
+    category = "categories"
+    series = "series"                       # this is required to add series support
+    tag = "tags"
+
+
+## RELATED POSTS CONFIGURATION
+[related]
+    threshold = 80
+    includeNewer = true
+    toLower = true
+
+[[related.indices]]
+    name = "series"
+    weight = 100
+
+[[related.indices]]
+    name = "keywords"
+    weight = 80
+
+[[related.indices]]
+    name = "tags"
+    weight = 60
+
+[[related.indices]]
+    name = "date"
+    weight = 10
+
+
+## NAVIGATION MENU CONFIGURATION
+[[menu.main]]
+    name = "Posts"
+    url = "posts/"
+    weight = 1
+
+[[menu.main]]
+    name = "Categories"
+    url = "categories/"
+    weight = 2
+
+[[menu.main]]
+    name = "Tags"
+    url = "tags/"
+    weight = 2
+
+
+## THEME-SPECIFIC CONFIGURATION
+[params.frugal.site]
+    googleSiteVerificationID = ""           # enter your Google Site Verification ID to enable
+
+[params.frugal.style]
+    syntaxHighlightMode = ""                # choices are "light" and "dark", defaults to "light"
+    accentColor = ""                        # defaults to "#0379C4" 
+
+[params.frugal.pages.home]
+    link = ""                               # home splash screen link, defaults to "posts"
+
+[params.frugal.pages.e404]
+    link = ""                               # 404 splash screen link, defaults to "posts"
+
+[params.frugal.seo.facebook]
+    appid = "YOUR_FACEBOOK_APPID"
+    admins = []
+
+[params.frugal.author]
+    name = "YOUR NAME"
+    email = "YOUR_MAIL@YOURDOMAIN.TLD"
+
+[params.frugal.author.social]
+    facebook = "YOUR_FACEBOOK_ID"
+    github = "YOUR_GITHUB_ID"
+    twitter = "YOUR_TWITTER_ID"
+    linkedin = "YOUR_LINKEDIN_ID"
+    reddit = "YOUR_REDDIT_ID"
+
+[params.frugal.publisher]
+    name = "YOUR_PUBLISHER_NAME"            # required for Google Structured Data
+    
+[params.frugal.publisher.social]
+    facebook = ""                           # publisher sameAs links for Structured Data
+    github = ""
+    twitter = ""
+    linkedin = ""
+    reddit = ""
+
+[params.frugal.formspree]
+    email = "YOUR_FORMS@YOURDOMAIN.TLD"     # enables the formspree "contact me" form
+
+[params.frugal.mailchimp]
+    server = "MAILLIST.SERVER.TLD"          # mailchimp server (ie DOMAIN.us20.list-manage.com)
+    userid = "MAILLIST_USER_ID"             # mailchimp user id
+    audienceid = "MAILLIST_AUDIENCE_ID"     # mailchimp audience id
+
+## SOCIAL LINKS IN FOOTER
+[[params.frugal.social.links]]
+    name = "github"
+    weight = 1
+
+[[params.frugal.social.links]]
+    name = "twitter"
+    weight = 2
+
+[[params.frugal.social.links]]
+    name = "linkedin"
+    weight = 3
+
+[[params.frugal.social.links]]
+    name = "reddit"
+    weight = 4
+
+
+## POST SOCIAL SHARING CONFIGURATION
+[[params.frugal.social.share]]
+    provider = "facebook"
+    appid = "YOUR_FACEBOOK_APPID"
+    weight = 1
+
+[[params.frugal.social.share]]
+    provider = "twitter"
+    weight = 2
+    
+[[params.frugal.social.share]]
+    provider = "linkedin"
+    weight = 3
+
+[[params.frugal.social.share]]
+    provider = "whatsapp"
+    weight = 4
+

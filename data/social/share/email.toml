@@ -1,0 +1,6 @@
+name = "E-mail"
+icon = "at-solid"
+size_factor = 1.06
+color = "#fc4"
+title = "Share in an E-Mail"
+url="mailto:?subject={TITLE}&body={PERMALINK}"

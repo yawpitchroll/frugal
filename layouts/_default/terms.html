@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="main-content">
+    <header class="main-header">
+        <h1 class="title">{{ .Title }}</h1>
+    </header>
+    <ul class="terms">
+        {{- range .Data.Terms.Alphabetical }}
+        {{- $title := T "term_link_title" (dict "Count" .Count "Name" (humanize .Page.Name) "Term" ($.Data.Singular | lower)) }}
+        <li class="{{ $.Data.Singular | anchorize | urlize }}-{{ .Count }}"><a href="{{ .Page.RelPermalink }}" title="{{ $title | safeHTML }}">{{ .Page.Name | lower }}</a></li>
+        {{- end }}
+    </ul>
+</section>
+{{ end }}

@@ -1,0 +1,7 @@
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "{{ site.Title }}",
+    {{- with site.Params.alternatePageName }}"alternateName": "{{ . }}",{{- end }}
+    "url": "{{ site.BaseURL }}"
+}

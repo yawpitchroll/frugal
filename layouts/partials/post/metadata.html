@@ -1,0 +1,16 @@
+<ul class="items">
+    {{- with .Params.date }}
+    <li class="item">{{ partial "util/published" . | chomp }}</li>
+    {{- end }}
+    {{- with .Params.categories }}
+    {{- $links := apply (apply (sort .) "partial" "util/category" ".") "chomp" "." }}
+    <li class="item">{{ partial "util/fontawesome" "folder-open-solid" | chomp }}{{ delimit $links ", " " & " }}</li>
+    {{- end }}
+    {{- with .Params.tags -}}
+    {{- $links := apply (apply (sort .) "partial" "util/tag" ".") "chomp" "." }}
+    <li class="item">{{ partial "util/fontawesome" "tag-solid" | chomp }}{{ delimit $links ", " " & " }}</li>
+    {{- end }}
+    <li class="item">{{ partial "util/wordcount" . | chomp }}</li>
+    <li class="item">{{ partial "util/readingtime" . | chomp }}</li>
+</ul>
+{{- partial "util/series" . | chomp }}

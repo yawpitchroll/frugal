@@ -1,0 +1,11 @@
+{{- $copyright := site.Copyright | default (printf "%s All Rights Reserved" (dateFormat "2006" now)) }}
+{{- $pattern := "1|2\\d{3}" }}
+{{- if (findRE $pattern $copyright) }}
+{{- $start := time (printf "%s-01-01" (index (findRE $pattern $copyright 1) 0)) }}
+{{- $datestring := dateFormat "2006" $start }}
+{{- if (lt $start.Year now.Year) }}
+{{- $datestring = printf "%s-%s" $datestring (dateFormat "2006" now) }}
+{{- end }}
+{{- $copyright = $copyright | replaceRE $pattern $datestring }}
+{{- end }}
+{{- $copyright | markdownify | safeHTML}}

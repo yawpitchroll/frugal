@@ -1,0 +1,21 @@
+{{- $orig := resources.Get .Path -}}
+{{- $fname := .Path -}}
+{{- $ext := path.Ext $fname -}}
+{{- if .Rename -}}
+{{- $basename := replace (path.Base $fname) $ext "" -}}
+{{- $fname = replace $fname $basename .Rename -}}
+{{- end -}}
+{{- $image := $orig -}}
+{{- $width := $orig.Width -}}
+{{- $height := $orig.Height -}}
+{{- if .Ratio -}}
+{{- $ratio := lower .Ratio -}}
+{{- $dims := split $ratio "x" -}}
+{{- $wdim := int (index $dims 0) -}}
+{{- $hdim := int (index $dims 1) -}}
+{{- $height = mul (div $width $wdim) $hdim -}}
+{{- $resize := $orig.Fill (printf "%dx%d Center Gaussian" $width $height) -}}
+{{- $fname = replace $fname $ext (printf "_%s%s" $ratio $ext) -}}
+{{- $image = slice $resize | resources.Concat $fname -}}
+{{- end -}}
+{{- return (dict "Image" ($image | resources.Fingerprint) "Height" $height "Width" $width) -}}

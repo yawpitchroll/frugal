@@ -1,0 +1,3 @@
+{{- $text := T "a11y_link_text" }}
+{{- $title := T "a11y_link_title" | default $text }}
+<a class="screen-reader screen-reader-focusable" title="{{ $title }}" href="mailto:your@email.com&subject=Accessibility%20Feedback">{{ $text }}</a>

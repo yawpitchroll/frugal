@@ -1,0 +1,3 @@
+{{- $text := T "topbar_skip_text" . }}
+{{- $title := T "topbar_skip_title" | default $text }}
+<a class="screen-reader screen-reader-focusable" title="{{ $title }}" href="#main">{{ $text }}</a>

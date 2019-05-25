@@ -1,0 +1,69 @@
+{{- .Scratch.Set "in_post" (eq (.Type | pluralize) "posts") }}
+{{- .Scratch.Set "enable_social_share" (not (and (isset .Params "noshare") .Params.noshare)) }}
+{{- .Scratch.Set "enable_contact_form" (and (isset site.Params.Frugal "formspree") (not (and (isset .Params "nocontact") .Params.nocontact))) }}
+{{- .Scratch.Set "enable_subscribe_form" (and (isset site.Params.Frugal "mailchimp") (not (and (isset .Params "nosubscribe") .Params.nosubscribe))) }}
+<!DOCTYPE html>
+<html lang="{{ site.LanguageCode }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta name="theme-color" content="{{- site.Params.Frugal.Style.accentColor | default "#0379C4" -}}">
+        <title>{{- block "title" . -}}{{- .Param "Title" | default .Title | htmlUnescape | plainify }} | {{ site.Title -}}{{- end -}}</title>
+        {{ hugo.Generator }}
+        <link rel="canonical" href="{{ .Permalink }}">
+        {{ partial "util/pad" (slice 8 "head/rss" .) }}
+        {{ partial "util/pad" (slice 8 "head/stylesheet" .) }}
+        {{- with site.Params.Frugal.Author.name }}
+        <meta name="author" content="{{ . }}">
+        {{- end }}
+        <meta name="Description" content="{{ partial "util/description" . -}}"/>
+        {{ partial "util/pad" (slice 8 "favicon" .) | chomp }}
+        {{- with site.Params.Frugal.Site.googleSiteVerificationID }}
+        <meta name="google-site-verification" content="{{ . }}">
+        {{- end }}
+        {{ partial "util/pad" (slice 8 "seo/opengraph/common" .) | chomp -}}
+        {{- block "opengraph" . -}}
+        {{- end -}}
+        {{ partial "util/pad" (slice 8 "seo/twitter_cards" .) | chomp }}
+        {{ partial "util/pad" (slice 8 "seo/schema" .) | chomp }}
+        {{ template "_internal/google_analytics_async.html" . }}
+        {{- block "head-scripts" . -}}
+        {{- end }}
+    </head>
+    <body>
+        {{- block "body" . }}
+        <input type="checkbox" id="hamburger" name="hamburger"/>
+        <label for="hamburger" title="{{ T "topbar_hamburger_title" . }}">{{- partial "util/fontawesome" "bars-solid" | chomp -}}</label>
+        <header class="topbar">
+            <nav class="navbar">
+                <div class="logo">
+                    {{- $home := site.Home }}
+                    <a class="branding" href={{ $home.Permalink }} title="{{ T "topbar_logo_title" $home }}">
+                        {{ partial "util/logo" . | chomp -}} 
+                        {{ site.Title }}
+                    </a>
+                    {{ partial "a11y/skip-to-main" . | chomp }} 
+                </div>
+                <div class="navlinks">
+                    {{ partial "util/pad" (slice 20 "nav/navlinks" .) | chomp }}
+                </div>
+            </nav> 
+        </header>
+        <div class="site-content">
+            <main id="main" class="site-main" tabindex=-1>
+                {{- block "main" . -}}
+                {{- end }}
+            </main>
+
+            <footer class="site-footer">
+                {{- block "footer" . -}}
+                {{- end }}
+                <hr/>
+                {{ partial "util/pad" (slice 16 "nav/footbar" .) | chomp }} 
+            </footer>
+        </div>
+    {{- end -}}
+    {{- block "body-scripts" . -}}
+    {{- end }}
+    </body>
+</html>

@@ -1,0 +1,12 @@
+name = "Frugal"
+license = "MIT"
+licenselink = "https://github.com/yawpitchroll/frugal/blob/master/LICENSE"
+description = "A fast, relatively lightweight, code-friendly technical blogging theme for Hugo."
+homepage = "https://github.com/yawpitchroll/frugal"
+tags = ["clean", "simple", "minimal", "technical", "blog", "syntax highlighting", "mobile", "responsive", "seo", "flexbox", "personal"]
+features = ["blog", "shortcode", "syntax highlighting", "social share", "contact form", "mail list"]
+min_version = "0.54"
+
+[author]
+  name = "Michael Morehouse"
+  homepage = "https://www.yawpitchroll.com"

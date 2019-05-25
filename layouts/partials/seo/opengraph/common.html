@@ -1,0 +1,54 @@
+{{- /* Required Basic Properties */ -}}
+<meta property="og:title" content="{{ .Title | title }}">
+<meta property="og:description" content="{{ partial "util/description" . }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+
+{{- /* Required Image Properties */ -}}
+{{- with $.Param "images" }}
+{{- range first 5 . -}}
+<meta property="og:image" content="{{ . | absURL }}">
+{{- end }}
+{{- else }}
+{{- $loaded :=  partial "util/load-image" (dict "Path" "png/opengraph.png") }}
+<meta property="og:image" content="{{ $loaded.Image.Permalink }}">
+{{ end }}
+
+{{- /* Optional but Common Properties */ -}}
+{{- with .Params.locale }}
+<meta property="og:locale" content="{{ . }}">
+{{- else -}}
+{{- with site.Params.Locale }}
+<meta property="og:locale" content="{{ . }}">
+{{- else -}}
+{{- with site.LanguageCode }}
+{{- $prefix := replaceRE "^([A-Za-z]+)-.*$" "$1" . -}}
+{{- $suffix := upper (replaceRE "^.*-([A-Za-z]+)$" "$1" . ) -}}
+<meta property="og:locale" content="{{ replace . "-" "_" }}">
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- /* Facebook App ID */ -}}
+{{- with site.Params.Frugal.SEO.Facebook.appid }}
+<meta property='fb:app_id' content='{{ . }}'>
+{{- end }}
+
+{{- /* Facebook Admin IDs */ -}}
+{{- with site.Params.Frugal.SEO.Facebook.admins }}
+{{- range . }}
+<meta property="fb:admins" content="{{ . }}">
+{{- end }}
+{{- end }}
+
+{{- with .Params.audio }}
+{{- range . }}
+<meta property="og:audio" content="{{ . | absURL }}">
+{{- end }}
+{{- end }}
+
+{{- with .Params.videos }}
+{{- range . }}
+<meta property="og:video" content="{{ . | absURL }}">
+{{- end }}
+{{- end }}

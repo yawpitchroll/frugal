@@ -1,0 +1,11 @@
+<script type="application/ld+json">
+{{ partial "seo/structured/website" . | chomp | safeJS }}
+</script>
+<script type="application/ld+json">
+{{ partial "seo/structured/breadcrumb" . | chomp | safeJS }}
+</script>
+{{- if and (eq .Kind "page") (eq (.Type | pluralize) "posts") }}
+<script type="application/ld+json">
+{{ partial "seo/structured/article" . | chomp | safeJS }}
+</script>
+{{- end }}

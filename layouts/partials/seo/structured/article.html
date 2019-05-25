@@ -1,0 +1,20 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Article",{{ with site.Params.Frugal.author }}
+    "author": {{ partial "util/pad" (slice 4 "seo/structured/person" .) }},{{ end }}
+    "headline": "{{ .Title | truncate 110 }}",
+    "description": "{{ partial "util/description" . }}",
+    "wordCount": {{ .WordCount }},
+    "datePublished" : "{{ .PublishDate.Format "2006-01-02T15:04:05" }}",
+    "dateModified" : "{{ .Date.Format "2006-01-02T15:04:05"  }}",{{ with site.Params.Frugal.author }}
+    "copyrightHolder": {{ partial "util/pad" (slice 4 "seo/structured/person" .) | chomp }},{{ end }}
+    "copyrightYear": "{{ .PublishDate.Format "2006" }}",{{ $image := .Resources.GetMatch "images/opengraph.*" | default "png/opengraph.png" }}
+    "image" : [
+        {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Page" . "Path" $image "Ratio" "1x1")) | chomp }},
+        {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Page" . "Path" $image "Ratio" "4x3")) | chomp }},
+        {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Page" . "Path" $image "Ratio" "16x9")) | chomp }},
+        {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Page" . "Path" $image "Ratio" "2x1")) | chomp }}
+    ],
+    "mainEntityOfPage" : "{{ .Permalink }}",{{ with site.Params.Frugal.publisher }}
+    "publisher": {{ partial "util/pad" (slice 4 "seo/structured/organization" (dict "Site" site "Organization" .)) | chomp }}{{ end }}
+}

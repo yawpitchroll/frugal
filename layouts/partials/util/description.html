@@ -1,0 +1,15 @@
+{{- with .Description }}
+{{- . | htmlUnescape | plainify }}
+{{- else }}
+{{- if .IsPage}}
+{{- with .Params.Excerpt }}
+{{- . | htmlUnescape | plainify }}
+{{- else }}
+{{- .Summary | htmlUnescape | plainify }}
+{{- end }}
+{{- else }}
+{{- with site.Params.description }}
+{{- . | htmlUnescape | plainify }}
+{{- end }}
+{{- end }}
+{{- end -}}

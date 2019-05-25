@@ -1,0 +1,2 @@
+{{- $icon := cond (gt .WordCount 2000) "book-solid" "file-alt-solid" -}}
+{{ partial "util/fontawesome" $icon | chomp }}{{ T "word_count" .WordCount }}

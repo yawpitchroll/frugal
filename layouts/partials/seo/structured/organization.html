@@ -1,0 +1,21 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "{{ site.Params.Frugal.Publisher.name }}",
+    "url": "{{ site.BaseURL }}",{{ with site.Params.Frugal.Publisher.social }}
+    "sameAs" : [
+        {{ $stop := sub (len .) 1 }}
+        {{- range $account, $username := . -}}
+        {{- if $username -}}
+        {{- $setup := index site.Data.social.links $account -}}
+        {{- $url := replace $setup.url "{USERNAME}" $username -}}
+        "{{ $url }}"{{- if ne $stop 0 -}},
+        {{- end -}}
+        {{- end -}}
+        {{- $stop = sub $stop 1 -}}
+        {{- end -}}
+    ]{{ end }},
+    "logo": {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Path" "png/publisher-logo.png")) | chomp }}
+    {{- with .Site.Params.organizationAddress }}, "address": "{{ . }}"{{ end }}
+    {{- with .Site.Data.organization.contacts.contactPoint }}, "contactPoint": {{ . }}{{ end }}
+}

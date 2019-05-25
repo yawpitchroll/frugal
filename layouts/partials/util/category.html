@@ -1,0 +1,2 @@
+{{- $title := T "category_title" (dict "Category" (title .)) -}}
+<a class="post-category post-category-{{ . | urlize }}" title="{{ $title | safeHTML }}" href="/categories/{{ . | urlize }}">{{ . }}</a>

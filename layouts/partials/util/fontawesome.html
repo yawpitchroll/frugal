@@ -1,0 +1,5 @@
+{{- $svg := resources.Get ( printf "svg/fontawesome/%s.svg" . ) -}}
+{{- $svg := $svg | resources.Minify -}}
+<span class="fontawesome {{ anchorize . }}">
+{{- $svg.Content | safeHTML -}}
+</span>

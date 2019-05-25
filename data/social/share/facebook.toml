@@ -1,0 +1,5 @@
+name = "Facebook"
+icon = "facebook-f-brands"
+size_factor = 0.66
+color = "#3b5998"
+url = "https://www.facebook.com/dialog/share?href={PERMALINK}&app_id={APPID}&display=popup"

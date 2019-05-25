@@ -1,0 +1,12 @@
+{{- $loaded :=  partial "util/load-image" (dict "Path" .Path "Ratio" .Ratio) -}}
+{
+    "@context": "http://schema.org",
+    "@type": "ImageObject",{{ with site.Params.Frugal.author }}
+    "author": {{ partial "util/pad" (slice 4 "seo/structured/person" .) }},{{ end }}
+    "url": "{{ $loaded.Image.Permalink | absURL }}",{{ with .Page }}
+    "datePublished": "{{ .Page.Date.Format "2006-01-02T15:04:05" }}",{{ end }}{{ with .Name }}
+    "name": "{{ .Name }}",{{ end }}
+    "height" : {{ $loaded.Height }},
+    "width" : {{ $loaded.Width }}{{ with site.Params.Frugal.images.license }},
+    "license" : "{{ . }}"{{ end }}
+}

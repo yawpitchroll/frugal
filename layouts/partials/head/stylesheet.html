@@ -1,0 +1,11 @@
+{{- $style := resources.Get "scss/style.scss" | resources.ExecuteAsTemplate "style.scss" . -}}
+{{- $target := printf "css/%s.css" (site.Title | anchorize) -}}
+{{- if site.IsServer -}}
+{{- $options := (dict "targetPath" $target "outputStyle" "expanded" "enableSourceMap" true) -}}
+{{- $style = $style | toCSS $options | postCSS -}}
+<link rel="stylesheet" href="{{ $style.Permalink }}" media="screen">
+{{- else -}}
+{{- $options := (dict "targetPath" $target "outputStyle" "compressed") -}}
+{{- $style = $style | toCSS $options | postCSS | fingerprint -}}
+<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}" media="screen">
+{{- end }}

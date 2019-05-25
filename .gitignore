@@ -1,0 +1,5 @@
+# dependencies
+node_modules/
+
+# hugo pipes intermediate files
+exampleSite/resources

@@ -1,0 +1,4 @@
+name = "WhatsApp"
+icon = "whatsapp-brands"
+color = "#25D366"
+url="https://wa.me/?text={TITLE}%20-%20{PERMALINK}"

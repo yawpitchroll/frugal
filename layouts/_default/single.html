@@ -1,0 +1,112 @@
+{{- define "head-scripts" }}
+{{- $in_post := .Scratch.Get "in_post" }}
+{{- $enable_social_share := .Scratch.Get "enable_social_share" }}
+{{- if (and $in_post $enable_social_share) }}
+    {{ partial "head/clipboard" . }}
+{{- end }}
+{{- end }}
+
+{{ define "body-scripts" }}
+{{- $in_post := .Scratch.Get "in_post" }}
+{{- $enable_social_share := .Scratch.Get "enable_social_share" }}
+{{- if (and $in_post $enable_social_share) }}
+<script>
+    const btn = document.getElementById('copylink');
+    const clipboard = new ClipboardJS(btn);
+    btn.addEventListener('mouseleave', clearTooltip);
+    btn.addEventListener('blur', clearTooltip);
+
+    clipboard.on('success', function(event) {
+        event.clearSelection();
+        console.info('Action:', event.action);
+        console.info('Text:', event.text);
+        console.info('Trigger:', event.trigger);
+        showTooltip(event.trigger, {{ T "clipboard_tooltip" . }});
+    });
+
+    clipboard.on('error', function(event) {
+        console.error('Action:', event.action);
+        console.error('Trigger:', event.trigger);
+        showTooltip(event.trigger, fallbackMessage());
+    });
+
+    function clearTooltip(element) {
+        element.currentTarget.setAttribute('class', 'item link');
+        element.currentTarget.removeAttribute('aria-label');
+    }
+
+    function showTooltip(element, msg) {
+        element.setAttribute('class', 'item link tooltip');
+        element.setAttribute('aria-label', msg);
+    }
+
+    function fallbackMessage() {
+        var msg = '';
+        if (/iPhone|iPad/i.test(navigator.userAgent)) {
+            msg = '{{ T "clipboard_unsupported" . }}';
+        } else if (/Mac/i.text(navigator.userAgent)) {
+            msg = '{{ T "clipboard_mac" . }}';
+        } else {
+            msg = '{{ T "clipboard_pc" . }}';
+        }
+        return msg;
+    }
+</script>
+{{- end }}
+{{ end }}
+
+{{- define "opengraph" }}
+{{- partial "util/pad" (slice 8 "seo/opengraph/article" . ) }}
+{{- end }}
+
+{{- define "main" }}
+{{- $in_post := .Scratch.Get "in_post" }}
+{{- $enable_social_share := .Scratch.Get "enable_social_share" }}
+{{- $enable_contact_form := .Scratch.Get "enable_contact_form" }}
+{{- $enable_subscribe_form := .Scratch.Get "enable_subscribe_form" }}
+<article class="main-content">
+    <header class="main-header">
+        <h1 class="title">{{ .Title }}</h1>
+        {{- if $in_post }}
+        <div class="post-metadata">
+            {{ partial "util/pad" (slice 12 "post/metadata" .) | chomp }}
+        </div>
+        {{- end }}
+    </header>
+    <section class="post-content">
+        {{ .Content }}
+    </section>
+
+    <!-- related posts with the same tags -->
+    {{- with site.RegularPages.Related . | first 5 }}
+    <aside class="post-related">
+        <h1 class="related">{{ T "related_posts_label" (dict "Count" (len .)) }}</h1>
+        <ul class="bullets">
+            {{ range . }}
+                {{ .Render "bullet" }}
+            {{ end }}
+        </ul>
+    </aside>
+    {{ end }}
+
+    {{- if and ($in_post) (or $enable_social_share $enable_contact_form $enable_subscribe_form) }}
+    <footer class="post-footer">
+    {{- if $enable_social_share }}
+    {{ partial "util/pad" (slice 4 "post/share" .) | chomp }}
+    {{- end }}
+    {{- if $enable_contact_form }}
+    {{ partial "util/pad" (slice 4 "post/contact-form" .) | chomp }}
+    {{- end }}
+    {{- if $enable_subscribe_form }}
+    {{ partial "util/pad" (slice 4 "post/maillist-form" .) | chomp }}
+    {{- end }}
+    </footer>
+    {{- end }}
+</article>
+{{- end }}
+
+{{- define "footer" -}}
+{{- if not .Params.nav_off -}}
+{{ partial "util/pad" (slice 16 "post/navigation" .) | chomp }}
+{{- end }}
+{{- end }}

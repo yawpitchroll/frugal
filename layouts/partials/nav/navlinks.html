@@ -1,0 +1,6 @@
+<ul class="items">
+{{- range site.Menus.main }}
+    {{- $title := T "topbar_menu_title" . }}
+    <li class="item"><a href="{{ .URL | absURL }}" title="{{ $title }}">{{ .Name }}</a></li>
+{{- end }}
+</ul>

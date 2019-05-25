@@ -1,0 +1,3 @@
+name = "Github"    
+url = "https://github.com/{USERNAME}/"
+icon = "github-square-brands"

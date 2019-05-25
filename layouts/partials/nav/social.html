@@ -1,0 +1,27 @@
+<address class="social">
+    <ul class="social-items">
+        {{- with site.Params.Frugal.Social.links }}
+        {{- range sort . "weight" "asc" }}
+        {{- $provider := index site.Data.social.links .name }}
+        {{- $username := index site.Params.Frugal.Author.Social .name }}
+        {{- $url := replace $provider.url "{USERNAME}" $username }}
+        {{- $args := dict "Provider" $provider.name }}
+        {{- $text := T "social_link_text" $args }}
+        {{- $title := T "social_link_title" $args | default $text }}
+        <li class="social-item">
+            <a href="{{ $url }}" title="{{ $title }}" target="_blank" rel="noreferrer">{{- partial "util/fontawesome" $provider.icon | chomp -}}<span class="screen-reader">{{ $text }}</span></a>
+        </li>
+        {{- end }}
+        {{- end }}
+        {{- with .OutputFormats.Get "RSS" | default (site.Home.OutputFormats.Get "RSS") }}
+        {{- $rss := .RelPermalink }}
+        {{- with site.Data.social.links.rss }}
+        {{- $text := T "rss_link_text" }}
+        {{- $title := T "rss_link_title" | default $text }}
+        <li class="social-item">
+            <a href="{{ $rss }}" title="{{ $title }}">{{- partial "util/fontawesome" .icon | chomp -}}<span class="screen-reader">{{ $text }}</span></a>
+        </li>
+        {{- end }}
+        {{- end }}
+    </ul>
+</address>

@@ -1,0 +1,4 @@
+name = "LinkedIn"
+icon = "linkedin-in-brands"
+color = "#0077b5"
+url="https://www.linkedin.com/shareArticle/?url={PERMALINK}&mini=true"

@@ -1,0 +1,3 @@
+{{- $svg := resources.Get "svg/logo.svg" -}}
+{{- $svg := $svg | resources.Minify -}}
+{{ $svg.Content | safeHTML }}

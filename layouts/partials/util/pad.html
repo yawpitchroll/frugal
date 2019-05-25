@@ -1,0 +1,3 @@
+{{- $output := (partial (index . 1) (index . 2) | chomp) -}}
+{{- $output = replace $output "\n" (printf (printf "\n%%%ds" (index . 0)) " ") | safeHTML -}}
+{{ return $output }}

@@ -1232,6 +1232,12 @@ table:not(.lntable) {
     }
 }
 
+// footnote bodies are not given a unique class by blackfriday, only a unique id
+li[id^='fn:'] {
+    font-size: 0.85em;
+    font-weight: 300;
+}
+
 .footnote-return {
     font-weight: bold;
 }
@@ -1549,7 +1555,7 @@ table:not(.lntable) {
 /// DROPDOWNS FOR EMAIL AND MAIL LIST SUBSCRIPTION
 {{- $good := resources.Get "svg/fontawesome/check-solid.svg" | minify | fingerprint }}
 {{- $bad := resources.Get "svg/fontawesome/times-solid.svg" | minify | fingerprint }}
-.expandable {
+.form {
     margin: 1rem 0; 
     padding: 1rem;
     border: 1px solid #333;
@@ -1580,8 +1586,6 @@ table:not(.lntable) {
     }
 
     form {
-        transition: height 200ms ease-in-out 0s;
-        height: 0;
         overflow: hidden;
         padding: 0 0.4rem;
         padding-bottom: 0.2rem;
@@ -1685,6 +1689,11 @@ table:not(.lntable) {
             }
         }
     }
+}
+
+.expandable form {
+    transition: height 200ms ease-in-out 0s;
+    height: 0;
 }
 
 // contact form

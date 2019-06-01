@@ -1,0 +1,3 @@
+{{ $_hugo_config := `{ "version": 1 }` }}
+{{- $content := partial "post/contact-form" .Page }}
+{{- replace $content "form contactform expandable" "form contactform" | safeHTML }} 

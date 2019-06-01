@@ -12,7 +12,7 @@
 {{- $server := site.Params.Frugal.Mailchimp.server }}
 {{- $userid := site.Params.Frugal.Mailchimp.userid }}
 {{- $audienceid := site.Params.Frugal.Mailchimp.audienceid }}
-<div class="expandable maillist">
+<div class="form maillist expandable">
     <input type="checkbox" id="maillist-toggle" name="maillist-toggle" class="toggle"/>
     <label for="maillist-toggle" title="{{ $form_title }}" class="title">{{ $form_text }}</label>
     <form action="https://{{ $server }}/subscribe/post?u={{ $userid }}&amp;id={{ $audienceid }}" method="POST" name="subscribe" target="_blank" rel="noreferrer">

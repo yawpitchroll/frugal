@@ -10,7 +10,7 @@
 {{- $formspree_link := printf "<a href=\"https://docs.formspree.io/files/privacy.pdf\" target=\"_blank\" title=\"%s\" rel=\"noreferrer\">%s</a>" $formspree_title $formspree_text }}
 {{- $submit_text := T "contact_submit_text" . }}
 {{- $submit_title := T "contact_submit_title" . | default $submit_text }}
-<div class="expandable contactform">
+<div class="form contactform expandable" id="contact-form">
     <input type="checkbox" id="contact-toggle" name="contact-toggle" class="toggle"/>
     <label for="contact-toggle" title="{{ $form_title }}" class="title">{{ $form_text }}</label>
     <form action="//formspree.io/{{ site.Params.Frugal.Formspree.email }}" method="POST">

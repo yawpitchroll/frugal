@@ -2,7 +2,7 @@
     "@context": "http://schema.org",
     "@type": "Organization",
     "name": "{{ site.Params.Frugal.Publisher.name }}",
-    "url": "{{ site.BaseURL }}",{{ with site.Params.Frugal.Publisher.social }}
+    "url": "{{ printf "%s/" (strings.TrimRight "/" site.BaseURL) }}",{{ with site.Params.Frugal.Publisher.social }}
     "sameAs" : [
         {{ $stop := sub (len .) 1 }}
         {{- range $account, $username := . -}}

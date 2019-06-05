@@ -3,5 +3,5 @@
     "@type": "WebSite",
     "name": "{{ site.Title }}",
     {{- with site.Params.alternatePageName }}"alternateName": "{{ . }}",{{- end }}
-    "url": "{{ site.BaseURL }}"
+    "url": "{{ printf "%s/" (strings.TrimRight "/" site.BaseURL) }}"
 }

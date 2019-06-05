@@ -1,6 +1,6 @@
 {{- .Scratch.Set "in_post" (eq (.Type | pluralize) "posts") }}
 {{- .Scratch.Set "enable_social_share" (not (and (isset .Params "noshare") .Params.noshare)) }}
-{{- .Scratch.Set "enable_contact_form" (and (isset site.Params.Frugal "formspree") (not (and (isset .Params "nocontact") .Params.nocontact))) }}
+{{- .Scratch.Set "enable_contact_form" (and (isset site.Params.Frugal "contactform") (not (and (isset .Params "nocontact") .Params.nocontact))) }}
 {{- .Scratch.Set "enable_subscribe_form" (and (isset site.Params.Frugal "mailchimp") (not (and (isset .Params "nosubscribe") .Params.nosubscribe))) }}
 <!DOCTYPE html>
 <html lang="{{ site.LanguageCode }}">

@@ -5,9 +5,11 @@
 {{- $subject := T "contact_subject" . }}
 {{- $message_text := T "contact_message_text" . }}
 {{- $message_title := T "contact_message_title" . | default $message_text }}
-{{- $formspree_text := T "contact_formspree_text" . }}
-{{- $formspree_title := T "contact_formspree_title" . | default $formspree_text }}
-{{- $formspree_link := printf "<a href=\"https://docs.formspree.io/files/privacy.pdf\" target=\"_blank\" title=\"%s\" rel=\"noreferrer\">%s</a>" $formspree_title $formspree_text }}
+{{- $provider := title site.Params.Frugal.ContactForm.provider }}
+{{- if eq $provider "Formspree" }}
+{{- $provider_text := T "contact_provider_text" (dict "Name" $provider) }}
+{{- $provider_title := T "contact_provider_title" (dict "Name" $provider) | default $provider_text }}
+{{- $provider_link := printf "<a href=\"https://docs.formspree.io/files/privacy.pdf\" target=\"_blank\" title=\"%s\" rel=\"noreferrer\">%s</a>" $provider_title $provider_text }}
 {{- $submit_text := T "contact_submit_text" . }}
 {{- $submit_title := T "contact_submit_title" . | default $submit_text }}
 <div class="form contactform expandable" id="contact-form">
@@ -26,9 +28,39 @@
             <input type="hidden" name="_subject" value="{{ $subject }}">
             <input type="text" name="_gotcha" class="gotcha">
             <div class="legalese">
-                <p>{{ T "contact_legalese" (dict "Formspree" $formspree_link) | markdownify | safeHTML }}</p>
+                <p>{{ T "contact_legalese" (dict "Link" $provider_link) | markdownify | safeHTML }}</p>
             </div>
             <button name="submit" title="{{ $submit_title }}">{{ $submit_text }}</button>
         </div>
     </form>
 </div>
+{{- else if eq $provider "Netlify" }}
+{{- $provider_text := T "contact_provider_text" (dict "Name" $provider) }}
+{{- $provider_title := T "contact_provider_title" (dict "Name" $provider) | default $provider_text }}
+{{- $provider_link := printf "<a href=\"https://www.netlify.com/privacy/\" target=\"_blank\" title=\"%s\" rel=\"noreferrer\">%s</a>" $provider_title $provider_text }}
+{{- $submit_text := T "contact_submit_text" . }}
+{{- $submit_title := T "contact_submit_title" . | default $submit_text }}
+<div class="form contactform expandable" id="contact-form">
+    <input type="checkbox" id="contact-toggle" name="contact-toggle" class="toggle"/>
+    <label for="contact-toggle" title="{{ $form_title }}" class="title">{{ $form_text }}</label>
+    <form action="{{ .RelPermalink }}" method="POST" name="contact" data-netlify="true" netlify-honeypot="_gotcha"{{ with site.Params.Frugal.ContactForm.use_recaptcha }} data-netlify-recaptcha="true"{{ end }}>
+        <div class="contents">
+            <div class="email">
+                <label for="contactform-email"></label>
+                <input type="email" name="email" id="contactform-email" placeholder="{{ $email_text }}" title="{{ $email_title }}" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+            <div class="message">
+                <label for="message"></label>
+                <textarea name="message" placeholder="{{ $message_text }}" title="{{ $message_title }}" id="message" cols="30" rows="5" required minlength="5" maxlength="500" autocapitalize="sentences" autocomplete="on" spellcheck="true"></textarea>
+            </div>
+            <input type="hidden" name="subject" value="{{ $subject }}">
+            <input type="text" name="_gotcha" class="gotcha">
+            <div class="legalese">
+                <p>{{ T "contact_legalese" (dict "Link" $provider_link) | markdownify | safeHTML }}</p>
+            </div>{{ with site.Params.Frugal.ContactForm.use_recaptcha }}
+            <div data-netlify-recaptcha="true"></div>{{ end }}
+            <button name="submit" title="{{ $submit_title }}">{{ $submit_text }}</button>
+        </div>
+    </form>
+</div>
+{{- end }}

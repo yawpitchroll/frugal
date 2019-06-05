@@ -121,15 +121,15 @@ other = "Message re: {{ .Permalink }}"
 [contact_message_text]
 other = "Enter your Message"
 
-[contact_formspree_text]
-other = "Formspree"
+[contact_provider_text]
+other = "{{ .Name }}"
 
-[contact_formspree_title]
-other = "View Formspree's privacy policy"
+[contact_provider_title]
+other = "View {{ .Name }}'s privacy policy"
 
 [contact_legalese]
 other = """
-Messages submitted via this form will be processed by {{ .Formspree }} and \
+Messages submitted via this form will be processed by {{ .Link }} and \
 forwarded to me for review and response. No contact details provided will be \
 added to my mailing list or collected for marketing purposes, except if you \
 choose to subscribe yourself using the form found elsewhere on this page."""

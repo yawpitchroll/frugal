@@ -7,7 +7,7 @@
         {{- $default := printf "Share on %s" $setup.name }}
         {{- $url := replace $setup.url "{TITLE}" $.Title }}
         {{- $url = replace $url "{PERMALINK}" $.Permalink }}
-        {{- $url = replace $url "{ID}" .id }}
+        {{- $url = replace $url "{APPID}" .id }}
         {{- $args := dict "Provider" $setup.name }}
         {{- $text := T "social_share_text" $args }}
         {{- $title := T "social_share_title" $args | default $text }}

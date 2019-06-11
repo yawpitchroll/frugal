@@ -1222,8 +1222,10 @@ table:not(.lntable) {
 
 // in-post footnotes
 .footnote-ref {
-    font-weight: bold;
-    padding-left: 0.2rem;
+    @extend %font-mono;
+    font-size: 0.7em;
+    font-weight: 400;
+    padding-left: 0.1rem;
 
     &:target {
        padding-top: 1rem;
@@ -1234,13 +1236,15 @@ table:not(.lntable) {
     }
 
     > a {
-
+        
         &:before { 
             content: "\005B";
+            //vertical-align: 0.1em;
         }
 
         &:after { 
             content: "\005D";
+            //vertical-align: 0.1em;
         }
     }
 }

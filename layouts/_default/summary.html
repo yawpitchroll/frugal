@@ -17,7 +17,7 @@
             <div class="body">
                 <p>{{ .Summary | htmlUnescape | plainify }}</p>
             </div>
-            {{- if .Truncated -}}
+            {{- if or .Params.Summary .Truncated -}}
             <footer class="readmore">
                 {{ T "summary_read_more_text" . }}
             </footer>

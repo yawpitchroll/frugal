@@ -614,11 +614,23 @@ twitter-widget {
     }
 }
 
-// 404 only
+// error coloration on splash (ie 404.html)
 .splash-main.error {
     a {
         color: crimson;
         fill: crimson;
+     
+        &:hover {
+            @extend %brand-hover-svg;
+        }
+    }
+}
+
+// happy coloration on splash (ie thanks/index.html)
+.splash-main.happy {
+    a {
+        color: #090;
+        fill: #090;
      
         &:hover {
             @extend %brand-hover-svg;

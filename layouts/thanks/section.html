@@ -1,15 +1,15 @@
 {{- define "title" -}}
-{{ T "404_page_title" . | default .Title }} | {{ site.Title }}
+{{ T "thanks_page_title" . | default .Title }} | {{ site.Title }}
 {{- end -}}
 
 {{- define "body" }}
-{{- $link := site.Params.Frugal.Pages.E404.link | default (site.Params.Frugal.Pages.Home.Link | default "posts") }}
+{{- $link := site.Params.Frugal.Pages.Thanks.link | default (site.Params.Frugal.Pages.Home.Link | default "posts") }}
 {{- $page := site.Home.GetPage $link | default (index site.Home.Sections 0) }}
-{{- $text := T "404_link_text" $page }}
-{{- $title := T "404_link_title" $page | default $text }}
+{{- $text := T "thanks_link_text" $page }}
+{{- $title := T "thanks_link_title" $page | default $text }}
 <div class="splash">
     <div class="site-content">
-        <main class="splash-main error">
+        <main class="splash-main happy">
             <a class="branding" href="{{ $page.Permalink }}" title="{{ $title }}">
                 {{ partial "util/logo" . | chomp }}
                 <h1 class="entry-text">{{ $text }}</h1>

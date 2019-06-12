@@ -18,6 +18,16 @@ other = "404, So Sorry"
 [404_link_title]
 other = "Return to {{ .Title }}"
 
+# thank you page
+[thanks_page_title]
+other = "{{ .Title }}"
+
+[thanks_link_text]
+other = "Thank You!"
+
+[thanks_link_title]
+other = "Return to {{ .Title }}"
+
 # common topbar elements
 [topbar_logo_title]
 other = "Home"
@@ -31,35 +41,43 @@ other = "Go to {{ .Name }}"
 [topbar_hamburger_title]
 other = "Toggle Navigation Menu"
 
+# post summaries
 [summary_title]
 other = "Read &ldquo;{{ .Title }}&rdquo;"
 
 [summary_read_more_text]
 other = "Read More..."
 
+# related post navigation
 [related_posts_label]
 one = "Related Post"
 other = "Related Posts"
 
+# bullets
 [bullet_title]
 other = "Read &ldquo;{{ .Title }}&rdquo;"
 
-
+# category links
 [category_title]
 other = "See other posts in the category &ldquo;{{ .Category }}&rdquo;"
 
+# tag links
 [tag_title]
 other = "See other posts with the tag &ldquo;{{ .Tag }}&rdquo;"
 
+# term links
+[term_link_title]
+one = "Browse the 1 post in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
+other = "Browse the {{ .Count }} posts in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
 
-
+# rss feed content
 [rss_section_title]
 other = "Recent content in {{ .Title }} on {{ .Site }}"
 
 [rss_site_title]
 other = "Recent content on {{ .Site }}"
 
-
+# post metadata
 [word_count]
 one = "1 Word"
 other = "{{ .Count }} Words"
@@ -68,7 +86,7 @@ other = "{{ .Count }} Words"
 one = "1 Min"
 other = "{{ .Count }} Mins"
 
-
+# post pagination
 [paginator_first_title]
 other = "Skip to the first page"
 
@@ -87,16 +105,35 @@ other = "Go to the next page"
 [paginator_last_title]
 other = "Skip to the last page"
 
+# post navigation
+[post_navigation_previous_title]
+other = "Read &ldquo;{{ .PrevInSection.Title }}&rdquo;"
 
+[post_navigation_next_title]
+other = "Read &ldquo;{{ .NextInSection.Title }}&rdquo;"
 
-[term_link_title]
-one = "Browse the 1 post in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
-other = "Browse the {{ .Count }} posts in the &ldquo;{{ .Name }}&rdquo; {{ .Term }}"
+# post series navigation
+[series_link_title]
+other = "See all of the &ldquo;{{ .Title }}&rdquo; series"
 
+[series_overview]
+one = "Part {{ .Index }} of the {{ .Link }} series"
+other = "Part {{ .Index }} of {{ .Count }} in the {{ .Link }} series"
 
+# post copy/paste link
+[clipboard_tooltip]
+other = "Copied!"
 
+[clipboard_unsupported]
+other = "No support"
 
+[clipboard_mac]
+other = "Press ⌘--C to copy"
 
+[clipboard_pc]
+other = "Press Ctrl-C to copy"
+
+# social sharing
 [social_share_text]
 other = "Share on {{ .Provider }}"
 
@@ -105,8 +142,6 @@ other = "Share in an E-Mail"
 
 [social_share_copy_title]
 other = "Click to copy the link for &ldquo;{{ .Title }}&rdquo;"
-
-
 
 # contact form
 [contact_form_text]
@@ -140,7 +175,6 @@ other = "Submit"
 [contact_submit_title]
 other = "Submit your message"
 
-
 # maillist form
 [maillist_form_text]
 other = "Subscribe to my Mailing List"
@@ -173,8 +207,6 @@ other = "Subscribe"
 [maillist_submit_title]
 other = "Submit your subscription request"
 
-
-
 # common footer elements
 [social_link_text]
 other = "Connect on {{ .Provider }}"
@@ -199,32 +231,3 @@ other = "Powered by {{ .Hugo }} and {{ .Frugal }}"
 
 [a11y_link_text]
 other = "Send Accessibility Feedback"
-
-[post_navigation_previous_title]
-other = "Read &ldquo;{{ .PrevInSection.Title }}&rdquo;"
-
-[post_navigation_next_title]
-other = "Read &ldquo;{{ .NextInSection.Title }}&rdquo;"
-
-[series_link_title]
-other = "See all of the &ldquo;{{ .Title }}&rdquo; series"
-
-[series_overview]
-one = "Part {{ .Index }} of the {{ .Link }} series"
-other = "Part {{ .Index }} of {{ .Count }} in the {{ .Link }} series"
-
-
-
-
-
-[clipboard_tooltip]
-other = "Copied!"
-
-[clipboard_unsupported]
-other = "No support"
-
-[clipboard_mac]
-other = "Press ⌘--C to copy"
-
-[clipboard_pc]
-other = "Press Ctrl-C to copy"

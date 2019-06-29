@@ -276,9 +276,14 @@ sub {
     top: 0.4em;
 }
 
-// special-case for inline <code> tags, Hugo likes to decorate a lot of stuff with <code>
-p code {
-    font-size: 1em;
+// special-case for inline <code> tags, Hugo highlighting likes to decorate a lot of stuff with <code>
+code:not([class^="language"]) {
+    border-radius: 0.2em;
+    border: 1px solid desaturate(lighten($branding-accent, 30%), 80%);
+    background: desaturate(lighten($branding-accent, 58%), 30%);
+    padding: 0 0.3em;
+    margin: 0 0.2em;
+    font-size: 0.9em;
     font-weight: 300;
 }
 

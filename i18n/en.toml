@@ -120,6 +120,16 @@ other = "See all of the &ldquo;{{ .Title }}&rdquo; series"
 one = "Part {{ .Index }} of the {{ .Link }} series"
 other = "Part {{ .Index }} of {{ .Count }} in the {{ .Link }} series"
 
+# post defintions
+[definition_anchor_title]
+other = "Read the definition of &ldquo;{{ .Word }}&rdquo;"
+
+[definition_doclink_text]
+other = "docs"
+
+[definition_doclink_title]
+other = "See the documentation for &ldquo;{{ .Word }}&rdquo;"
+
 # post copy/paste link
 [clipboard_tooltip]
 other = "Copied!"

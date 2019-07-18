@@ -111,6 +111,19 @@ $navbar-breakpoint: 45em !default; // defaults to 720px @ 16px base font size
     font-weight: 400;
 }
 
+// offset targeted anchors to account for floating topbar
+%offset-anchors {
+    &:target {
+       padding-top: 1rem;
+       margin-top: -1rem;
+
+       @include toggle-navbar {
+           padding-top: 5rem;
+           margin-top: -5rem;
+       }
+   }
+}
+
 /// FLUID TYPOGRAPHY & VERTICAL RHYTHM
 html {
     scroll-behavior: smooth;
@@ -125,6 +138,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+
+    // offsest Hugo's automatic anchors on all headers to account for top bar
+    @extend %offset-anchors;
     @extend %font-serif;
     font-weight: 600;
 }
@@ -285,6 +301,7 @@ code:not([class^="language"]) {
     margin: 0 0.2em;
     font-size: 0.9em;
     font-weight: 300;
+    white-space: nowrap;
 }
 
 /// BLOCK ELEMENT STYLING
@@ -312,6 +329,7 @@ dl {
     margin: 0 1rem;
 
     dt {
+        @extend %offset-anchors;
         margin-top: 0.8em;
         font-size: 1.2em;
         font-weight: 400;
@@ -330,6 +348,60 @@ dl {
             margin-right: 0.8em;
             font-size: 0.8em;
             font-weight: 500;
+        }
+    }
+}
+
+// definition shortcode
+.definition {
+
+    margin: 1rem 0;
+    dt {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: flex-start;
+    }
+
+    .word {
+        @extend %font-mono;
+    }
+
+    .doclink {
+        margin-left: 1em;
+        padding: 0 1em;
+        font-size: 0.5em;
+        font-weight: 500;
+        font-variant: small-caps;
+        vertical-align: middle;
+        background: lighten(adjust-hue($branding-accent, 225deg), 50%);
+        border-radius: 5px;
+        border: 1px solid #ddd;
+
+        &:focus,
+        &:hover {
+            background: $branding-accent;
+            color: lighten(adjust-hue($branding-accent, 225deg), 50%);
+            text-decoration: none;
+        }
+    }
+
+    .errata {
+        margin: 0 1rem;
+        margin-top: 1rem;
+        padding: 0 1em;
+        font-size: 0.85em;
+        font-weight: 200;
+        border-radius: 5px;
+        border: 1px dashed #ccc;
+        background: lighten(adjust-hue($branding-accent, 225deg), 50%);
+
+        p {
+            padding: 0;
+        }
+
+        &:empty {
+            display: none;
         }
     }
 }
@@ -1239,29 +1311,20 @@ table:not(.lntable) {
 
 // in-post footnotes
 .footnote-ref {
+    @extend %offset-anchors;
     @extend %font-mono;
     font-size: 0.7em;
     font-weight: 400;
     padding-left: 0.1rem;
 
-    &:target {
-       padding-top: 1rem;
-
-       @include toggle-navbar {
-           padding-top: 5rem;
-       }
-    }
-
     > a {
         
         &:before { 
             content: "\005B";
-            //vertical-align: 0.1em;
         }
 
         &:after { 
             content: "\005D";
-            //vertical-align: 0.1em;
         }
     }
 }

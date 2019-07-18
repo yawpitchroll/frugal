@@ -1,0 +1,15 @@
+{{- $word := replaceRE "^\\s+|\\s+$" "" (index (first 1 (split .Inner ":")) 0) -}}
+{{- $args := dict "Word" $word -}}
+{{- $anchor := anchorize $word -}}
+{{- $anchor_title := T "definition_anchor_title" $args -}}
+{{- $content := .Inner | markdownify -}}
+{{- $old := printf "<dt>%s</dt>" $word -}}
+{{- $new := printf "<dt id=\"%s\"><a class=\"word\" href=\"#%s\" title=\"%s\">%s</a></dt>" $anchor $anchor $anchor_title $word -}}
+{{- with .Get "doclink" -}}
+{{- $doclink_text := T "definition_doclink_text" $args -}}
+{{- $doclink_title := T "definition_doclink_title" $args | default $doclink_text -}}
+{{- $new = replace $new "</a></dt>" (printf "</a> <a class=\"doclink\" href=\"%s\" title=\"%s\">%s</a></dt>" . $doclink_title $doclink_text) -}}
+{{- end -}}
+{{- $content = replace $content $old $new -}}
+{{- $content = printf "%s</div>" (replace $content "</dl>" "</dl><div class=\"errata\">") -}}
+{{ printf "<div class=\"definition\">%s</div>" $content | safeHTML }}

@@ -1,0 +1,8 @@
+{{- $keyword := .Get 0 -}}
+{{- $code := printf "`%s`" $keyword | markdownify }}
+{{- $anchor := .Get 1 | default $keyword -}}
+{{- $url := relref . (printf "#%s" (anchorize $anchor)) -}}
+{{- $pattern := "<a class\"definition\" href=\"%s\" title=\"%s\">%s</a>" -}}
+{{- $title := T "definition_reflink_title" (dict "Word" $keyword ) -}}
+{{- $link := printf $pattern $url $title $code -}}
+{{ $link | safeHTML }}

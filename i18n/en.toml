@@ -130,6 +130,9 @@ other = "docs"
 [definition_doclink_title]
 other = "See the documentation for &ldquo;{{ .Word }}&rdquo;"
 
+[definition_reflink_title]
+other = "Read the entry for &ldquo;{{ .Word }}&rdquo;"
+
 # post copy/paste link
 [clipboard_tooltip]
 other = "Copied!"

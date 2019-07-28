@@ -10,7 +10,11 @@
 <meta property="og:image" content="{{ . | absURL }}">
 {{- end }}
 {{- else }}
-{{- $loaded :=  partial "util/load-image" (dict "Path" "png/opengraph.png") }}
+{{- $image := resources.Get "png/opengraph.png" -}}
+{{- with $.Page.Resources.Match "png/opengraph.png" -}}
+{{- $image = index . 0 -}}
+{{- end -}}
+{{- $loaded :=  partial "util/load-image" (dict "Image" $image) }}
 <meta property="og:image" content="{{ $loaded.Image.Permalink }}">
 {{ end }}
 

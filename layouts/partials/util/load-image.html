@@ -1,5 +1,5 @@
-{{- $orig := resources.Get .Path -}}
-{{- $fname := .Path -}}
+{{- $orig := .Image -}}
+{{- $fname := $orig.RelPermalink -}}
 {{- $ext := path.Ext $fname -}}
 {{- if .Rename -}}
 {{- $basename := replace (path.Base $fname) $ext "" -}}
@@ -17,5 +17,7 @@
 {{- $resize := $orig.Fill (printf "%dx%d Center Gaussian" $width $height) -}}
 {{- $fname = replace $fname $ext (printf "_%s%s" $ratio $ext) -}}
 {{- $image = slice $resize | resources.Concat $fname -}}
+{{- else -}}
+{{- $image = slice $image | resources.Concat $fname -}}
 {{- end -}}
 {{- return (dict "Image" ($image | resources.Fingerprint) "Height" $height "Width" $width) -}}

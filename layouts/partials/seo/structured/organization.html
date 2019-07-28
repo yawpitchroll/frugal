@@ -1,3 +1,7 @@
+{{- $image := resources.Get "png/opengraph.png" -}}
+{{- with $.Page.Resources.Match "png/opengraph.png" -}}
+{{- $image = index . 0 -}}
+{{- end -}}
 {
     "@context": "http://schema.org",
     "@type": "Organization",
@@ -15,7 +19,7 @@
         {{- $stop = sub $stop 1 -}}
         {{- end -}}
     ]{{ end }},
-    "logo": {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Path" "png/publisher-logo.png")) | chomp }}
+    "logo": {{ partial "util/pad" (slice 8 "seo/structured/image" (dict "Image" $image)) | chomp }}
     {{- with .Site.Params.organizationAddress }}, "address": "{{ . }}"{{ end }}
     {{- with .Site.Data.organization.contacts.contactPoint }}, "contactPoint": {{ . }}{{ end }}
 }

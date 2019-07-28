@@ -1,4 +1,4 @@
-{{- $loaded :=  partial "util/load-image" (dict "Path" .Path "Ratio" .Ratio) -}}
+{{- $loaded :=  partial "util/load-image" (dict "Image" .Image "Ratio" .Ratio) -}}
 {
     "@context": "http://schema.org",
     "@type": "ImageObject",{{ with site.Params.Frugal.author }}

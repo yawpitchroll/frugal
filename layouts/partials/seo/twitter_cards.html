@@ -8,12 +8,16 @@
 {{- with $featured -}}
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="{{ $featured.Permalink }}"/>
-{{- else -}}
+{{ else -}}
 {{- with site.Params.images -}}
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="{{ index . 0 | absURL }}"/>
 {{ else -}}
-{{- $loaded :=  partial "util/load-image" (dict "Path" "png/opengraph.png" "Ratio" "2x1" "Rename" "twitter") -}}
+{{- $featured := resources.Get "png/opengraph.png" -}}
+{{- with $.Page.Resources.Match "png/opengraph.png" -}}
+{{- $featured = index . 0 -}}
+{{- end -}}
+{{- $loaded := partial "util/load-image" (dict "Image" $featured "Ratio" "2x1" "Rename" "twitter") }}
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="{{ $loaded.Image.Permalink }}"/>
 {{- end -}}

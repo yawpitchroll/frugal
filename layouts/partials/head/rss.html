@@ -1,4 +1,3 @@
 {{- with .OutputFormats.Get "RSS" | default (site.Home.OutputFormats.Get "RSS") -}}
-<link rel="alternate" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ site.Title }}">
-<link rel="feed" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ site.Title }}">
+{{ printf `<link rel="%s" href="%s" type="%s" title="%s" />` .Rel .Permalink .MediaType.Type $.Site.Title | safeHTML }}
 {{- end }}

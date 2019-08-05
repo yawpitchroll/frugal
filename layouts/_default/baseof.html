@@ -3,7 +3,7 @@
 {{- .Scratch.Set "enable_contact_form" (and (isset site.Params.Frugal "contactform") (not (and (isset .Params "nocontact") .Params.nocontact))) }}
 {{- .Scratch.Set "enable_subscribe_form" (and (isset site.Params.Frugal "mailchimp") (not (and (isset .Params "nosubscribe") .Params.nosubscribe))) }}
 <!DOCTYPE html>
-<html lang="{{ site.LanguageCode }}">
+<html lang="{{ .Language.Lang }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">

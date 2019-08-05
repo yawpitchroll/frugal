@@ -5,6 +5,9 @@
 {{- $basename := replace (path.Base $fname) $ext "" -}}
 {{- $fname = replace $fname $basename .Rename -}}
 {{- end -}}
+{{- with .MaxWidth -}}
+{{- $orig = $orig.Resize (printf "%dx" (int .)) -}}
+{{- end -}}
 {{- $image := $orig -}}
 {{- $width := $orig.Width -}}
 {{- $height := $orig.Height -}}

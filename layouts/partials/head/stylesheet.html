@@ -3,9 +3,9 @@
 {{- if site.IsServer -}}
 {{- $options := (dict "targetPath" $target "outputStyle" "expanded" "enableSourceMap" true) -}}
 {{- $style = $style | toCSS $options | postCSS -}}
-<link rel="stylesheet" href="{{ $style.Permalink }}" media="screen">
+<link rel="stylesheet" href="{{ $style.Permalink }}" media="all">
 {{- else -}}
 {{- $options := (dict "targetPath" $target "outputStyle" "compressed") -}}
 {{- $style = $style | toCSS $options | postCSS | fingerprint -}}
-<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}" media="screen">
+<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}" media="all">
 {{- end }}

@@ -32,8 +32,8 @@
     </head>
     <body>
         {{- block "body" . }}
-        <input type="checkbox" id="hamburger" name="hamburger"/>
-        <label for="hamburger" title="{{ T "topbar_hamburger_title" . }}">{{- partial "util/fontawesome" "bars-solid" | chomp -}}</label>
+        <input class="hamburger" type="checkbox" id="hamburger" name="hamburger"/>
+        <label class="hamburger" for="hamburger" title="{{ T "topbar_hamburger_title" . }}">{{- partial "util/fontawesome" "bars-solid" | chomp -}}</label>
         <header class="topbar">
             <nav class="navbar">
                 <div class="logo">

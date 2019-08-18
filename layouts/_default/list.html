@@ -9,7 +9,7 @@
         {{- .Content }}
         <nav>
             <ul class="summaries">
-                {{- $paginator := .Paginate (where .Data.Pages "Type" "!=" "page") }}
+                {{- $paginator := .Paginate (where .Site.RegularPages "Type" "!=" "page") }}
                 {{- if and (eq .Kind "taxonomy") (eq .Type "series") }}
                 {{- range $paginator.Pages.ByPublishDate }}
                 {{- .Render "summary" }}

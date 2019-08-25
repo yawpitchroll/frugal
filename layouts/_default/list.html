@@ -11,7 +11,7 @@
             <ul class="summaries">
                 {{- $paginator := .Paginate (where .Site.RegularPages "Type" "!=" "page") }}
                 {{- if and (eq .Kind "taxonomy") (eq .Type "series") }}
-                {{- range $paginator.Pages.ByPublishDate }}
+                {{- range .Pages }}
                 {{- .Render "summary" }}
                 {{- end }}
                 {{- else }}

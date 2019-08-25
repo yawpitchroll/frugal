@@ -1,6 +1,10 @@
-{{- $word := replaceRE "^\\s+|\\s+$" "" (index (first 1 (split .Inner ":")) 0) -}}
+{{- $word := index (findRE "(.*?)\\s:\\s" .Inner 1) 0 -}}
+{{- $word = replaceRE "^\\s+|\\s+$" "" (index (first 1 (split $word "\n:")) 0) -}}
 {{- $args := dict "Word" $word -}}
 {{- $anchor := anchorize $word -}}
+{{- with .Get "anchor" -}}
+{{- $anchor = anchorize . -}}
+{{- end -}}
 {{- $anchor_title := T "definition_anchor_title" $args -}}
 {{- $content := .Inner | markdownify -}}
 {{- $old := printf "<dt>%s</dt>" $word -}}
@@ -12,4 +16,5 @@
 {{- end -}}
 {{- $content = replace $content $old $new -}}
 {{- $content = printf "%s</div>" (replace $content "</dl>" "</dl><div class=\"errata\">") -}}
+{{- $content = replace $content "<div class=\"errata\"></div>" "" -}}
 {{ printf "<div class=\"definition\">%s</div>" $content | safeHTML }}

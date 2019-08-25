@@ -138,11 +138,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-
     // offsest Hugo's automatic anchors on all headers to account for top bar
     @extend %offset-anchors;
     @extend %font-serif;
-    font-weight: 600;
 }
 
 h1 {
@@ -152,6 +150,7 @@ h1 {
         padding-top: ( 0.235em, 0.238em ),
         margin-bottom: ( 0.353em, 0.333em ),
     ));
+    font-weight: 600;
 }
 
 h2 {
@@ -161,6 +160,7 @@ h2 {
         padding-top: ( 0.407em, 0.373em ),
         margin-bottom: ( 0.333em, 0.333em ),
     ));
+    font-weight: 500;
 }
 
 h3 {
@@ -170,6 +170,16 @@ h3 {
         padding-top: ( 0.591em, 0.537em ),
         margin-bottom: ( 0.318em, 0.341em ),
     ));
+    @extend %font-sans;
+    font-weight: 400;
+}
+
+h4, h5, h6 {
+    @extend %font-sans;
+    text-transform: lowercase;
+    font-variant: small-caps;
+    font-weight: 300;
+    letter-spacing: 0.05em;
 }
 
 h4 {
@@ -365,6 +375,12 @@ dl {
 
     .word {
         @extend %font-mono;
+    }
+
+    .symbol {
+        @extend %font-mono;
+        font-size: 1.3em;
+        font-weight: 600;
     }
 
     .doclink {

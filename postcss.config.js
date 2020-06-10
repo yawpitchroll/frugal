@@ -1,12 +1,12 @@
 module.exports = {
     plugins: [
         require('postcss-normalize')({
-            browsers: [
+            overrideBrowserslist: [
                 "last 2 versions",
             ]
         }),
         require('autoprefixer')({
-            browsers: [
+            overrideBrowserslist: [
                 "last 2 versions",
             ]
         }),

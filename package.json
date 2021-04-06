@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/yawpitchroll/frugal#readme",
   "devDependencies": {
-    "autoprefixer": "^9.8.0",
-    "cssnano": "^4.1.10",
-    "postcss-cli": "^7.1.1",
+    "autoprefixer": "^10.2.5",
+    "cssnano": "^4.1.11",
+    "postcss-cli": "^8.3.1",
     "postcss-normalize": "^9.0.0"
   },
   "dependencies": {

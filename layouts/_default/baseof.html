@@ -26,7 +26,7 @@
         {{- end -}}
         {{ partial "util/pad" (slice 8 "seo/twitter_cards" .) | chomp }}
         {{ partial "util/pad" (slice 8 "seo/schema" .) | chomp }}
-        {{ template "_internal/google_analytics_async.html" . }}
+        {{ template "_internal/google_analytics.html" . }}
         {{- block "head-scripts" . -}}
         {{- end }}
     </head>
